@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timelive/controllers/event_controller.dart';
+import 'package:timelive/data/data_generator.dart';
 import 'package:timelive/event_screen.dart';
 import 'package:timelive/models/event.dart';
 import 'package:timelive/qr_code/model/qr_code_data.dart';
@@ -18,6 +19,16 @@ class TimelineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      persistentFooterButtons: [
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () => DataGenerator.generateSomeData(),
+        ),
+        IconButton(
+          icon: const Icon(Icons.remove),
+          onPressed: () => DataGenerator.clearGeneratedData(),
+        )
+      ],
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.qr_code_scanner),
           onPressed: () async {

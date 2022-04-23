@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:timelive/controllers/event_controller.dart';
+import 'package:timelive/data/data_generator.dart';
 import 'package:timelive/models/event_form_state.dart';
 import 'package:timelive/timelive_app.dart';
 
