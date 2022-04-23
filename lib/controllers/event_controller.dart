@@ -1,10 +1,11 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
 import 'package:timelive/models/event.dart';
 import 'package:timelive/models/event_form_state.dart';
 import 'package:timelive/models/tag.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
 
 class EventController {
   static final storageRef = FirebaseStorage.instance.ref();
@@ -21,6 +22,11 @@ class EventController {
 
   static Stream<QuerySnapshot<Event>> getEventsStream(List<String> filters) {
     return filters.isEmpty ? _eventsRef.snapshots() : _eventsRef.where("tags", arrayContainsAny: filters).snapshots();
+  }
+
+  static Future<List<Event>> getAllEvents() async {
+    final eventsSnapshot = await _eventsRef.get();
+    return eventsSnapshot.docs.map((e) => e.data()).toList();
   }
 
   static Stream<QuerySnapshot<Tag>> getTagsStream() {
