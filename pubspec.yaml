@@ -38,6 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_storage: ^10.2.13
 
+  json_annotation: ^4.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -48,7 +50,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
-
+  json_serializable: ^6.1.5
+  build_runner: ^2.1.8
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
