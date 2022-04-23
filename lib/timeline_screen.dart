@@ -26,7 +26,7 @@ class TimelineScreen extends StatelessWidget {
           }),
       // backgroundColor: Colors.black,
       body: StreamBuilder<QuerySnapshot<Event>>(
-          stream: EventController.getEventsStream(),
+          stream: EventController.getEventsStream([]),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Text('Something went wrong');

@@ -17,7 +17,7 @@ class Event {
   @JsonKey(name: 'date')
   final DateTime date;
   @JsonKey(name: 'tags')
-  final List<Tag> tags;
+  final List<String> tags;
 
   const Event(this.id, this.name, this.description, this.date, this.tags);
 

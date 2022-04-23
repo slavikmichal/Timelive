@@ -68,7 +68,7 @@ class Tile extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              event.tags.map((tag) => tag.name).fold('', (previousValue, element) => previousValue + ' #$element'),
+              event.tags.fold('', (previousValue, element) => previousValue + ' #$element'),
               style: GoogleFonts.ubuntu(
                 fontSize: 16,
                 color: ColorSchemer.textColor,

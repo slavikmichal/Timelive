@@ -16,33 +16,33 @@ class EventController {
       fromFirestore: (snapshot, _) => Tag.fromJson(snapshot.data()!), toFirestore: (tag, _) => tag.toJson());
   static final storageRef = FirebaseStorage.instance.ref();
 
-  static Stream<QuerySnapshot<Event>> getEventsStream() {
-    return _eventsRef.snapshots();
+  static Stream<QuerySnapshot<Event>> getEventsStream(List<String> filters) {
+    return filters.isEmpty ? _eventsRef.snapshots() : _eventsRef.where("tags", arrayContainsAny: filters).snapshots();
+  }
+
+  static Stream<QuerySnapshot<Tag>> getTagsStream() {
+    return _tagsRef.snapshots();
   }
 
   static Future<void> addEvent(EventFormState formState) {
     var event = Event(null, formState.name, formState.description, formState.date, formState.tags);
 
     formState.tags.forEach((tag) {
-      var incrTag = Tag(tag.id, tag.name, tag.counter + 1, tag.color);
-      if (tag.counter > 1) {
-        //tag exists, increase counter
-        _tagsRef.where('id', isEqualTo: tag.id).get().then((QuerySnapshot value) {
-          value.docs.forEach((doc) {
-            _tagsRef
-                .doc(doc.id)
-                .update(incrTag.toJson())
-                .then((value) => print('Tag updated'))
-                .catchError((error) => print('Failed to update tag -- $error'));
-          });
-        });
-      } else {
-        //insert new tag
-        _tagsRef
-            .add(incrTag)
-            .then((value) => print('Tag inserted'))
-            .catchError((error) => print('Failed to insert tag -- $error'));
-      }
+      _tagsRef.where('name', isEqualTo: tag).get().then((value) {
+        if (value.docs.isEmpty) {
+          _tagsRef
+              .add(Tag.id(tag))
+              .then((value) => print('Tag inserted'))
+              .catchError((error) => print('Failed to insert tag -- $error'));
+        } else {
+          Tag editingTag = value.docs.first.data();
+          _tagsRef
+              .doc(value.docs.first.id)
+              .update(Tag(editingTag.name, editingTag.counter + 1, editingTag.color).toJson())
+              .then((value) => print('Tag updated'))
+              .catchError((error) => print('Failed to update tag -- $error'));
+        }
+      });
     });
 
     return _eventsRef
@@ -51,10 +51,10 @@ class EventController {
         .catchError((error) => print('Failed to insert event -- $error'));
   }
 
-  static Future _saveFiles(String event_id, List<File> files) async {
+  static Future _saveFiles(String eventId, List<File> files) async {
     files.forEach((file) async {
       final fileName = basename(file.path);
-      final destination = '$event_id/$fileName';
+      final destination = '$eventId/$fileName';
 
       try {
         final ref = storageRef.storage.ref(destination);
