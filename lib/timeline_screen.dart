@@ -19,11 +19,17 @@ class TimelineScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.qr_code_scanner),
           onPressed: () async {
-            QrCodeData? value = await QrScanner.scan();
-            // TODO do something with the parsed data from QR code
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Scanned data: ${value?.toJson().toString()}')),
-            );
+            QrCodeData? qrCode = await QrScanner.scan();
+            if (qrCode == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Scanner could not read a QR code.')),
+              );
+              return;
+            }
+
+            DocumentSnapshot<Event> eventSnapshot = await EventController.getEventById(qrCode.eventId);
+            Event? eventData = eventSnapshot.data();
+            _navigateToEventScreen(context, eventData!, 0);
           }),
       // backgroundColor: Colors.black,
       body: StreamBuilder<QuerySnapshot<Event>>(
@@ -37,24 +43,25 @@ class TimelineScreen extends StatelessWidget {
               return const Text("Loading");
             }
 
-          final data = snapshot.requireData.docs.map((e) => e.data());
+            final Iterable<Event> data = snapshot.requireData.docs.map((e) => e.data());
 
-          return ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) => buildTile(context, data.elementAt(index), index, isFirst: index == 0, isLast: index == data.length - 1),
-          );
-        }),
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) => buildTile(
+                context,
+                data.elementAt(index),
+                index,
+                isFirst: index == 0,
+                isLast: index == data.length - 1,
+              ),
+            );
+          }),
     );
   }
 
   Widget buildTile(BuildContext context, Event event, int index, {bool isFirst = false, bool isLast = false}) {
     return InkWell(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => EventScreen(
-          event: event,
-          index: index,
-        ),
-      )),
+      onTap: () => _navigateToEventScreen(context, event, index),
       child: Hero(
         tag: 'event-tag$index',
         child: Tile(
@@ -68,5 +75,14 @@ class TimelineScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<dynamic> _navigateToEventScreen(BuildContext context, Event event, int index) {
+    return Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => EventScreen(
+        event: event,
+        index: index,
+      ),
+    ));
   }
 }

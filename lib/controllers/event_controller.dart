@@ -7,17 +7,24 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 
 class EventController {
+  static final storageRef = FirebaseStorage.instance.ref();
+
   static final CollectionReference<Event> _eventsRef = FirebaseFirestore.instance
       .collection('events')
       .withConverter<Event>(
           fromFirestore: (snapshot, _) => Event.fromJson(snapshot.id, snapshot.data()!),
           toFirestore: (event, _) => event.toJson());
+
   static final CollectionReference<Tag> _tagsRef = FirebaseFirestore.instance.collection('tags').withConverter<Tag>(
       fromFirestore: (snapshot, _) => Tag.fromJson(snapshot.data()!), toFirestore: (tag, _) => tag.toJson());
-  static final storageRef = FirebaseStorage.instance.ref();
+
 
   static Stream<QuerySnapshot<Event>> getEventsStream() {
     return _eventsRef.snapshots();
+  }
+
+  static Future<DocumentSnapshot<Event>> getEventById(String eventId) {
+    return _eventsRef.doc(eventId).get();
   }
 
   static Future<void> addEvent(EventFormState formState) {
