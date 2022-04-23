@@ -16,7 +16,7 @@ class Tag {
 
   const Tag(this.id, this.name, this.counter);
 
-  Tag.id(this.name, this.counter) : id = const Uuid().v4();
+  Tag.id(this.name) : id = const Uuid().v4(), counter = 0;
 
   factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);
   Map<String, dynamic> toJson() => _$TagToJson(this);
