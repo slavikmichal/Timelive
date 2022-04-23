@@ -19,7 +19,6 @@ class EventController {
   static final CollectionReference<Tag> _tagsRef = FirebaseFirestore.instance.collection('tags').withConverter<Tag>(
       fromFirestore: (snapshot, _) => Tag.fromJson(snapshot.data()!), toFirestore: (tag, _) => tag.toJson());
 
-
   static Stream<QuerySnapshot<Event>> getEventsStream(List<String> filters) {
     return filters.isEmpty ? _eventsRef.snapshots() : _eventsRef.where("tags", arrayContainsAny: filters).snapshots();
   }
@@ -27,6 +26,18 @@ class EventController {
   static Future<List<Event>> getAllEvents() async {
     final eventsSnapshot = await _eventsRef.get();
     return eventsSnapshot.docs.map((e) => e.data()).toList();
+  }
+
+  static Future<List<Tag>> getAllTags() async {
+    QuerySnapshot<Tag> tags = await _tagsRef.get();
+    return tags.docs.map((tag) => tag.data()).toList();
+  }
+
+  static Future<void> deleteGeneratedEvents() async {
+    var events = await getAllEvents();
+    events.where((Event element) => element.description.length > 40)
+        .toList()
+        .forEach((Event element) => _eventsRef.doc(element.id).delete());
   }
 
   static Stream<QuerySnapshot<Tag>> getTagsStream() {

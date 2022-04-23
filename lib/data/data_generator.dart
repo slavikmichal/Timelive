@@ -1,0 +1,53 @@
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:timelive/controllers/event_controller.dart';
+import 'package:timelive/models/event.dart';
+import 'package:timelive/models/event_form_state.dart';
+import 'package:timelive/models/tag.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
+import 'package:faker/faker.dart';
+
+class DataGenerator {
+
+  static const int elementsCountToGenerate = 5;
+
+  static List<Tag> allTags = [];
+  static Faker get faker => Faker();
+
+  static void generateSomeData() async {
+    if (allTags.isEmpty) {
+      allTags = await EventController.getAllTags();
+    }
+
+    for (int i = 0; i < elementsCountToGenerate; i++) {
+      var generatedEvent = generateEvent();
+      EventController.addEvent(generatedEvent);
+    }
+  }
+
+  static EventFormState generateEvent() {
+    EventFormState event = EventFormState();
+
+    String eventName = '${faker.company.name()} ${faker.sport.name()}';
+    String description = faker.lorem.sentences(faker.randomGenerator.integer(8, min: 3)).join(" ");
+    DateTime eventDate = faker.date.dateTime(minYear: 2012, maxYear: 2022);
+
+    event.name = eventName;
+    event.description = description;
+    event.date = eventDate;
+
+    var tagsIndexes = faker.randomGenerator.numbers(allTags.length, faker.randomGenerator.integer(4, min: 1));
+
+    for (int element in tagsIndexes) {
+      event.tags.add(allTags[element].name);
+    }
+
+    return event;
+  }
+
+  static clearGeneratedData() async {
+    await EventController.deleteGeneratedEvents();
+  }
+
+}

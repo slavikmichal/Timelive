@@ -44,12 +44,15 @@ class Tile extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  event.name,
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 18,
-                    color: ColorSchemer.textColor,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  child: Text(
+                    event.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.ubuntu(
+                      fontSize: 18,
+                      color: ColorSchemer.textColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Padding(
