@@ -33,7 +33,7 @@ class GenerateQrCode extends StatefulWidget {
 class _GenerateQrCodeState extends State<GenerateQrCode> {
   @override
   Widget build(BuildContext context) {
-    const message = 'HelloWorld';
+    const eventId = 'beed03ee-6446-4843-b2c9-d9cdd824736d';
     const size = 360.0;
 
     return Material(
@@ -45,13 +45,14 @@ class _GenerateQrCodeState extends State<GenerateQrCode> {
           children: <Widget>[
             Expanded(
               child: Center(
-                child: QrCodeFactory.generateSimple(message, size),
+                child:
+                    QrCodeFactory.generateSimple(eventId: eventId, size: size),
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40)
                   .copyWith(bottom: 40),
-              child: const Text(message),
+              child: const Text(eventId),
             ),
           ],
         ),

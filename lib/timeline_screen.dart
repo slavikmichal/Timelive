@@ -11,6 +11,7 @@ class TimelineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.navigate_next),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => EventScreen(),
         )),

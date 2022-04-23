@@ -3,12 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:timelive/qr_code/screen/generated_qr_code.dart';
 import 'package:timelive/tile.dart';
 
 import 'icon_indicator.dart';
 
 class EventScreen extends StatefulWidget {
-
   EventScreen({Key? key}) : super(key: key);
 
   @override
@@ -16,6 +16,9 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreenState extends State<EventScreen> {
+  // FIXME use real ID
+  static const String eventId = 'e11277ee-de48-43cc-a5f3-099642f6424c';
+
   List<String> kDemoImages = [
     'https://i.pinimg.com/originals/7f/91/a1/7f91a18bcfbc35570c82063da8575be8.jpg',
     'https://www.absolutearts.com/portfolio3/a/afifaridasiddique/Still_Life-1545967888l.jpg',
@@ -27,7 +30,6 @@ class _EventScreenState extends State<EventScreen> {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIUsxpakPiqVF4W_rOlq6eoLYboOFoxw45qw&usqp=CAU',
     'https://images.mojarto.com/photos/267893/large/DA-SL-01.jpg?1560834975',
   ];
-
 
   // Scroll controller for carousel
   late InfiniteScrollController _controller;
@@ -62,6 +64,12 @@ class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.qr_code),
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => const GeneratedQrCodeScreen(eventId: eventId),
+        )),
+      ),
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Column(
@@ -86,12 +94,12 @@ class _EventScreenState extends State<EventScreen> {
                 itemExtent: _itemExtent ?? 40,
                 scrollBehavior: kIsWeb
                     ? ScrollConfiguration.of(context).copyWith(
-                  dragDevices: {
-                    // Allows to swipe in web browsers
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.mouse
-                  },
-                )
+                        dragDevices: {
+                          // Allows to swipe in web browsers
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse
+                        },
+                      )
                     : null,
                 loop: true,
                 controller: _controller,

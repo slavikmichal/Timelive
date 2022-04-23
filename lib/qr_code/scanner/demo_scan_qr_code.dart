@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
+import 'package:timelive/qr_code/model/qr_code_data.dart';
 import 'package:timelive/qr_code/scanner/qr_scanner.dart';
 
 void main() => runApp(const ScanQrExample());
@@ -14,11 +14,11 @@ class ScanQrExample extends StatefulWidget {
 }
 
 class _ScanQrExampleState extends State<ScanQrExample> {
-  ScanResult? scanResult;
+  QrCodeData? qrCodeData;
 
   @override
   Widget build(BuildContext context) {
-    final scanResult = this.scanResult;
+    final qrCodeData = this.qrCodeData;
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -35,32 +35,25 @@ class _ScanQrExampleState extends State<ScanQrExample> {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           children: <Widget>[
-            if (scanResult == null) Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Text('Scan QR Code'),
-              ],
-            ),
-            if (scanResult != null)
+            if (qrCodeData == null)
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  Text('Scan QR Code'),
+                ],
+              ),
+            if (qrCodeData != null)
               Card(
                 child: Column(
                   children: <Widget>[
                     ListTile(
-                      title: const Text('Result Type'),
-                      subtitle: Text(scanResult.type.toString()),
+                      title: const Text('Event ID'),
+                      subtitle: Text(qrCodeData.eventId),
                     ),
                     ListTile(
-                      title: const Text('Raw Content'),
-                      subtitle: Text(scanResult.rawContent),
-                    ),
-                    ListTile(
-                      title: const Text('Format'),
-                      subtitle: Text(scanResult.format.toString()),
-                    ),
-                    ListTile(
-                      title: const Text('Format note'),
-                      subtitle: Text(scanResult.formatNote),
+                      title: const Text('Qr Generated At:'),
+                      subtitle: Text(qrCodeData.created.toString()),
                     ),
                   ],
                 ),
@@ -72,7 +65,7 @@ class _ScanQrExampleState extends State<ScanQrExample> {
   }
 
   Future<void> _scan() async {
-    var result = await QrScanner.startScanning();
-    setState(() => scanResult = result);
+    var result = await QrScanner.scan();
+    setState(() => qrCodeData = result);
   }
 }
