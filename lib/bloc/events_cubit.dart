@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timelive/controllers/event_controller.dart';
+import 'package:timelive/models/event_form_state.dart';
 
 import '../models/event.dart';
 
@@ -8,9 +9,14 @@ class EventsCubit extends Cubit<List<Event>> {
 
   EventsCubit() : super([]);
 
-  void initialize() async {
+  void refreshEvents() async {
     events = await EventController.getAllEvents();
     emit(events);
+  }
+
+  void addEvent(EventFormState eventFormState) {
+    EventController.addEvent(eventFormState);
+    refreshEvents();
   }
 
   Event getEventById(String id) {

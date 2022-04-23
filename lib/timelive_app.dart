@@ -13,7 +13,7 @@ class TimeliveApp extends StatelessWidget {
     return BlocProvider(
       create: (_) {
         final cubit = EventsCubit();
-        cubit.initialize();
+        cubit.refreshEvents();
         return cubit;
       },
       child: MaterialApp(
