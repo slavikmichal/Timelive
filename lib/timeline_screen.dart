@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timelive/event_screen.dart';
 import 'package:timelive/tile.dart';
 
 import 'icon_indicator.dart';
@@ -9,11 +10,16 @@ class TimelineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => EventScreen(),
+        )),
+      ),
       backgroundColor: Colors.black,
       body: ListView(
-        children: <Widget>[
+        children: const <Widget>[
           Tile(
-            indicator: const IconIndicator(
+            indicator: IconIndicator(
               iconData: Icons.circle,
               size: 20,
             ),
@@ -24,7 +30,7 @@ class TimelineScreen extends StatelessWidget {
             isFirst: true,
           ),
           Tile(
-            indicator: const IconIndicator(
+            indicator: IconIndicator(
               iconData: Icons.circle,
               size: 20,
             ),
@@ -34,7 +40,7 @@ class TimelineScreen extends StatelessWidget {
             description: 'This is a very nice description of this first event',
           ),
           Tile(
-            indicator: const IconIndicator(
+            indicator: IconIndicator(
               iconData: Icons.circle,
               size: 20,
             ),
@@ -44,7 +50,7 @@ class TimelineScreen extends StatelessWidget {
             description: 'This is a very nice description of this first event',
           ),
           Tile(
-            indicator: const IconIndicator(
+            indicator: IconIndicator(
               iconData: Icons.circle,
               size: 20,
             ),
@@ -54,7 +60,7 @@ class TimelineScreen extends StatelessWidget {
             description: 'This is a very nice description of this first event',
           ),
           Tile(
-            indicator: const IconIndicator(
+            indicator: IconIndicator(
               iconData: Icons.circle,
               size: 20,
             ),
