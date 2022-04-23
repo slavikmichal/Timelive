@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -10,7 +12,7 @@ class QrCodeFactory {
 
   static QrImage generateSimple({required String eventId, required double size}) {
     return QrImage(
-      data: QrCodeData(eventId, DateTime.now()).toJson().toString(),
+      data: jsonEncode(QrCodeData(eventId, DateTime.now()).toJson()),
       size: size,
       errorCorrectionLevel: QrErrorCorrectLevel.H,
       version: QrVersions.auto,
