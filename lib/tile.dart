@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:timelive/models/event.dart';
+import 'package:timelive/models/tag.dart';
 
 import 'icon_indicator.dart';
 
 class Tile extends StatelessWidget {
   final IconIndicator indicator;
-  final String date;
-  final String title;
-  final List<String> tags;
-  final String description;
+  final Event event;
   final bool isFirst;
   final bool isLast;
 
   const Tile({
     Key? key,
     required this.indicator,
-    required this.date,
-    required this.title,
-    required this.tags,
-    required this.description,
+    required this.event,
     this.isFirst = false,
     this.isLast = false,
   }) : super(key: key);
@@ -50,7 +46,7 @@ class Tile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  title,
+                  event.name,
                   style: GoogleFonts.lato(
                     fontSize: 18,
                     color: Colors.white.withOpacity(0.8),
@@ -58,7 +54,7 @@ class Tile extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  date,
+                  _formatDateTime(event.date),
                   style: GoogleFonts.ubuntu(
                     fontSize: 18,
                     color: Colors.white.withOpacity(0.6),
@@ -69,7 +65,7 @@ class Tile extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              tags.fold(
+              event.tags.map((tag) => tag.name).fold(
                   '', (previousValue, element) => previousValue + ' #$element'),
               style: GoogleFonts.lato(
                 fontSize: 16,
@@ -79,7 +75,7 @@ class Tile extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              description,
+              event.description,
               style: GoogleFonts.lato(
                 fontSize: 14,
                 color: Colors.white.withOpacity(0.6),
@@ -90,5 +86,9 @@ class Tile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _formatDateTime(DateTime date) {
+    return "${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}"; // ${date.hour.toString().padLeft(2,'0')}-${date.minute.toString().padLeft(2,'0')}";
   }
 }

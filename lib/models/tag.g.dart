@@ -13,9 +13,19 @@ Tag _$TagFromJson(Map<String, dynamic> json) => Tag(
       json['color'] as int,
     );
 
-Map<String, dynamic> _$TagToJson(Tag instance) => <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'counter': instance.counter,
-      'color': instance.color,
-    };
+Map<String, dynamic> _$TagToJson(Tag instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'name': instance.name,
+    'counter': instance.counter,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('color', instance.color);
+  return val;
+}
