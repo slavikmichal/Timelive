@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:timelive/models/event.dart';
-import 'package:timelive/models/tag.dart';
 import 'package:timelive/themes/color_schemer.dart';
 
 import 'icon_indicator.dart';
@@ -91,6 +90,9 @@ class Tile extends StatelessWidget {
   }
 
   String _formatDateTime(DateTime date) {
-    return "${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}"; // ${date.hour.toString().padLeft(2,'0')}-${date.minute.toString().padLeft(2,'0')}";
+    var day = date.day.toString().padLeft(2, '0');
+    var month = date.month.toString().padLeft(2, '0');
+    var year = date.year.toString();
+    return "$day.$month.$year";
   }
 }
