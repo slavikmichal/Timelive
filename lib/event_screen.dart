@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:timelive/models/event.dart';
 import 'package:timelive/line_painter.dart';
 import 'package:timelive/qr_code/screen/generated_qr_code.dart';
 import 'package:timelive/tile.dart';
@@ -9,9 +10,9 @@ import 'package:timelive/tile.dart';
 import 'icon_indicator.dart';
 
 class EventScreen extends StatefulWidget {
-  final String id;
+  final Event event;
 
-  const EventScreen({Key? key, required this.id}) : super(key: key);
+  const EventScreen({Key? key, required this.event}) : super(key: key);
 
   @override
   State<EventScreen> createState() => _EventScreenState();
@@ -19,8 +20,6 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen> {
   static const textShift = 0.19988425925925924769188314471879;
-  // FIXME use real ID
-  static const String eventId = 'e11277ee-de48-43cc-a5f3-099642f6424c';
 
   List<String> kDemoImages = [
     'https://i.pinimg.com/originals/7f/91/a1/7f91a18bcfbc35570c82063da8575be8.jpg',
@@ -66,12 +65,11 @@ class _EventScreenState extends State<EventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('Screen $screenWidth');
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.qr_code),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => const GeneratedQrCodeScreen(eventId: eventId),
+          builder: (_) => GeneratedQrCodeScreen(eventId: widget.event.id!),
         )),
       ),
       backgroundColor: Colors.black,
@@ -80,19 +78,15 @@ class _EventScreenState extends State<EventScreen> {
           children: [
             const SizedBox(height: 20),
             Hero(
-              tag: 'event-tag${widget.id}',
-              child: const Tile(
-                indicator: IconIndicator(
+              tag: 'event-tag${widget.event.id}',
+              child: Tile(
+                indicator: const IconIndicator(
                   iconData: Icons.circle,
                   size: 20,
                 ),
-                date: '13.05.2022',
-                title: 'First one',
-                tags: ['one', 'two', 'three'],
-                description:
-                    'This is a very nice description of this first event',
-                isFirst: false,
-                isLast: false,
+                event: widget.event,
+                isFirst: true,
+                isLast: true,
               ),
             ),
             Stack(

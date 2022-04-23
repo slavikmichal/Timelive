@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:timelive/models/tag.dart';
@@ -21,6 +22,10 @@ class Event {
 
   const Event(this.id, this.name, this.description, this.date, this.tags);
 
-  factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
+  factory Event.fromJson(String id, Map<String, dynamic> json) {
+    json['id'] = id;
+    return _$EventFromJson(json);
+  }
+
   Map<String, dynamic> toJson() => _$EventToJson(this);
 }

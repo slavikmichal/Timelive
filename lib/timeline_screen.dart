@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:timelive/controllers/event_controller.dart';
 import 'package:timelive/event_screen.dart';
+import 'package:timelive/models/event.dart';
+import 'package:timelive/qr_code/model/qr_code_data.dart';
+import 'package:timelive/qr_code/scanner/qr_scanner.dart';
 import 'package:timelive/tile.dart';
 
 import 'icon_indicator.dart';
@@ -10,43 +15,53 @@ class TimelineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.qr_code_scanner),
+          onPressed: () async {
+            QrCodeData? value = await QrScanner.scan();
+            // TODO do something with the parsed data from QR code
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Scanned data: ${value?.toJson().toString()}')),
+            );
+          }),
       backgroundColor: Colors.black,
-      body: ListView(
-        children: <Widget>[
-          buildTile( context, '1', isFirst: true ),
-          buildTile( context, '2' ),
-          buildTile( context, '3' ),
-          buildTile( context, '4' ),
-          buildTile( context, '5' ),
-          buildTile( context, '6' ),
-          buildTile( context, '7' ),
-          buildTile( context, '8' ),
-          buildTile( context, '9', isLast: true ),
-        ],
-      ),
+      body: StreamBuilder<QuerySnapshot<Event>>(
+        stream: EventController.getEventsStream(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text("Loading");
+          }
+
+          final data = snapshot.requireData;
+
+          return ListView(
+            children: data.docs.map((e) => buildTile(context, e.data())).toList(),
+          );
+        }),
     );
   }
 
   Widget buildTile(
       BuildContext context,
-      String id, {
+      Event event, {
       bool isFirst = false,
       bool isLast = false}) {
     return InkWell(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => EventScreen(id: id,),
+        builder: (_) => EventScreen(event: event,),
       )),
       child: Hero(
-        tag: 'event-tag$id',
+        tag: 'event-tag$event.id!',
         child: Tile(
           indicator: const IconIndicator(
             iconData: Icons.circle,
             size: 20,
           ),
-          date: '13.05.2022',
-          title: 'First one',
-          tags: ['one', 'two', 'three'],
-          description: 'This is a very nice description of this first event',
+          event: event,
           isFirst: isFirst,
           isLast: isLast,
         ),
