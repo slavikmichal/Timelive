@@ -18,6 +18,7 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreenState extends State<EventScreen> {
+  static const textShift = 0.19988425925925924769188314471879;
   // FIXME use real ID
   static const String eventId = 'e11277ee-de48-43cc-a5f3-099642f6424c';
 
@@ -65,6 +66,7 @@ class _EventScreenState extends State<EventScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Screen $screenWidth');
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.qr_code),
@@ -96,7 +98,7 @@ class _EventScreenState extends State<EventScreen> {
             Stack(
               children: [
                 SizedBox(
-                  width: 78.5,
+                  width: screenWidth * textShift,
                   child: CustomPaint(
                     painter: LinePainter(
                       MediaQuery.of(context).size.height - 50,
