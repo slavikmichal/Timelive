@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timelive/controllers/event_controller.dart';
 import 'package:timelive/event_screen.dart';
@@ -40,21 +41,22 @@ class TimelineScreen extends StatelessWidget {
 
           return ListView.builder(
             itemCount: data.length,
-            itemBuilder: (context, index) => buildTile(context, data.elementAt(index), isFirst: index == 0, isLast: index == data.length - 1),
+            itemBuilder: (context, index) => buildTile(context, data.elementAt(index), index, isFirst: index == 0, isLast: index == data.length - 1),
           );
         }),
     );
   }
 
-  Widget buildTile(BuildContext context, Event event, {bool isFirst = false, bool isLast = false}) {
+  Widget buildTile(BuildContext context, Event event, int index, {bool isFirst = false, bool isLast = false}) {
     return InkWell(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => EventScreen(
           event: event,
+          index: index,
         ),
       )),
       child: Hero(
-        tag: 'event-tag$event.id!',
+        tag: 'event-tag$index',
         child: Tile(
           indicator: const IconIndicator(
             iconData: Icons.circle,

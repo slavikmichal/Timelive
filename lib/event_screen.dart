@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
-import 'package:timelive/models/event.dart';
 import 'package:timelive/line_painter.dart';
+import 'package:timelive/models/event.dart';
 import 'package:timelive/qr_code/screen/generated_qr_code.dart';
 import 'package:timelive/tile.dart';
 
@@ -11,8 +11,9 @@ import 'icon_indicator.dart';
 
 class EventScreen extends StatefulWidget {
   final Event event;
+  final int index;
 
-  const EventScreen({Key? key, required this.event}) : super(key: key);
+  const EventScreen({Key? key, required this.event, required this.index}) : super(key: key);
 
   @override
   State<EventScreen> createState() => _EventScreenState();
@@ -78,15 +79,15 @@ class _EventScreenState extends State<EventScreen> {
           children: [
             const SizedBox(height: 20),
             Hero(
-              tag: 'event-tag${widget.event.id}',
+              tag: 'event-tag${widget.index}',
               child: Tile(
                 indicator: const IconIndicator(
                   iconData: Icons.circle,
                   size: 20,
                 ),
                 event: widget.event,
-                isFirst: true,
-                isLast: true,
+                isFirst: false,
+                isLast: false,
               ),
             ),
             Stack(
