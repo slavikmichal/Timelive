@@ -5,15 +5,15 @@ import 'package:timeline_tile/timeline_tile.dart';
 import 'icon_indicator.dart';
 
 class Tile extends StatelessWidget {
-  IconIndicator indicator;
-  String date;
-  String title;
-  List<String> tags;
-  String description;
-  bool isFirst = false;
-  bool isLast = false;
+  final IconIndicator indicator;
+  final String date;
+  final String title;
+  final List<String> tags;
+  final String description;
+  final bool isFirst;
+  final bool isLast;
 
-  Tile({
+  const Tile({
     Key? key,
     required this.indicator,
     required this.date,
