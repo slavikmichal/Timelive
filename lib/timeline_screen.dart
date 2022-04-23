@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:timelive/controllers/event_controller.dart';
 import 'package:timelive/event_screen.dart';
 import 'package:timelive/models/event.dart';
+import 'package:timelive/qr_code/model/qr_code_data.dart';
+import 'package:timelive/qr_code/scanner/qr_scanner.dart';
 import 'package:timelive/tile.dart';
 
 import 'icon_indicator.dart';
@@ -13,6 +15,15 @@ class TimelineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.qr_code_scanner),
+          onPressed: () async {
+            QrCodeData? value = await QrScanner.scan();
+            // TODO do something with the parsed data from QR code
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Scanned data: ${value?.toJson().toString()}')),
+            );
+          }),
       backgroundColor: Colors.black,
       body: StreamBuilder<QuerySnapshot<Event>>(
         stream: EventController.getEventsStream(),

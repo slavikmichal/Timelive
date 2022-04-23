@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timelive/models/event.dart';
 import 'package:timelive/models/event_form_state.dart';
 import 'package:timelive/models/tag.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
 
 class EventController {
   static final CollectionReference<Event> _eventsRef =
@@ -14,6 +17,7 @@ class EventController {
       .withConverter<Tag>(
           fromFirestore: (snapshot, _) => Tag.fromJson(snapshot.data()!),
           toFirestore: (tag, _) => tag.toJson());
+  static final storageRef = FirebaseStorage.instance.ref();
 
   static Stream<QuerySnapshot<Event>> getEventsStream() {
     return _eventsRef.snapshots();
@@ -48,11 +52,22 @@ class EventController {
       }
     });
 
-    // TODO save files
+    return _eventsRef.add(event)
+       .then((value) => _saveFiles(value.id, formState.images))
+       .catchError((error) => print('Failed to insert event -- $error'));
+  }
 
-    return _eventsRef
-        .add(event)
-        .then((value) => print('Event inserted'))
-        .catchError((error) => print('Failed to insert event -- $error'));
+  static Future _saveFiles(String event_id, List<File> files) async {
+    files.forEach((file) async {
+      final fileName = basename(file!.path);
+      final destination = '$event_id/$fileName';
+
+      try {
+        final ref = storageRef.storage.ref(destination);
+        await ref.putFile(file);
+      } catch (e) {
+        print('error occured while saving file');
+      }
+    });
   }
 }

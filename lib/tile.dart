@@ -53,12 +53,15 @@ class Tile extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  _formatDateTime(event.date),
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 18,
-                    color: Colors.white.withOpacity(0.6),
-                    fontWeight: FontWeight.w800,
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: Text(
+                    _formatDateTime(event.date),
+                    style: GoogleFonts.ubuntu(
+                      fontSize: 18,
+                      color: Colors.white.withOpacity(0.6),
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ],
