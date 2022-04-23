@@ -59,7 +59,7 @@ class EventController {
 
   static Future _saveFiles(String event_id, List<File> files) async {
     files.forEach((file) async {
-      final fileName = basename(file!.path);
+      final fileName = basename(file.path);
       final destination = '$event_id/$fileName';
 
       try {
