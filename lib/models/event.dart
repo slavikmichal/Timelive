@@ -9,7 +9,7 @@ part 'event.g.dart';
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class Event {
   @JsonKey(name: 'id')
-  final String id;
+  final String? id;
   @JsonKey(name: 'name')
   final String name;
   @JsonKey(name: 'description')

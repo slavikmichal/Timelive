@@ -9,7 +9,7 @@ class EventController {
   
 
   Future<void> addEvent(EventFormState formState) {
-    var event = Event(formState.name, formState.description, formState.date, formState.tags);
+    var event = Event(null, formState.name, formState.description, formState.date, formState.tags);
     
     formState.tags.forEach((tag) {
       var incr_tag = Tag(tag.id, tag.name, tag.counter+1);
