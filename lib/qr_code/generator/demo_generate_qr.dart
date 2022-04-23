@@ -45,13 +45,11 @@ class _GenerateQrCodeState extends State<GenerateQrCode> {
           children: <Widget>[
             Expanded(
               child: Center(
-                child:
-                    QrCodeFactory.generateSimple(eventId: eventId, size: size),
+                child: QrCodeFactory.generateSimple(eventId: eventId, size: size),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40)
-                  .copyWith(bottom: 40),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40).copyWith(bottom: 40),
               child: const Text(eventId),
             ),
           ],

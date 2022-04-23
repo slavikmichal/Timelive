@@ -10,10 +10,9 @@ Event _$EventFromJson(Map<String, dynamic> json) => Event(
       json['id'] as String?,
       json['name'] as String,
       json['description'] as String,
-      DateTime.fromMillisecondsSinceEpoch((json['date'] as Timestamp).millisecondsSinceEpoch), //TODO: FIX CORRECT AUTO GENERATION
-      (json['tags'] as List<dynamic>)
-          .map((e) => Tag.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      DateTime.fromMillisecondsSinceEpoch((json['date'] as Timestamp).millisecondsSinceEpoch),
+      //TODO: FIX CORRECT AUTO GENERATION
+      (json['tags'] as List<dynamic>).map((e) => Tag.fromJson(e as Map<String, dynamic>)).toList(),
     );
 
 Map<String, dynamic> _$EventToJson(Event instance) {

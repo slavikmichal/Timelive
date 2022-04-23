@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timelive/themes/color_schemer.dart';
 import 'package:timelive/timeline_screen.dart';
 
 class TimeliveApp extends StatelessWidget {
@@ -8,9 +9,10 @@ class TimeliveApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Timelive',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      // themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
+      theme: ColorSchemer.lightTheme(),
+      darkTheme: ColorSchemer.darkTheme(),
       home: const TimelineScreen(),
     );
   }

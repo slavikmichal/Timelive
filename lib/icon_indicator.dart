@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timelive/themes/color_schemer.dart';
 
 class IconIndicator extends StatelessWidget {
   const IconIndicator({
@@ -17,7 +18,7 @@ class IconIndicator extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white.withOpacity(0.7),
+            color: ColorSchemer.indicatorShadowColor,
           ),
         ),
         Positioned.fill(
@@ -29,7 +30,7 @@ class IconIndicator extends StatelessWidget {
               child: Icon(
                 iconData,
                 size: size,
-                color: const Color(0xFF9E3773).withOpacity(0.7),
+                color: ColorSchemer.iconIndicatorColor,
               ),
             ),
           ),

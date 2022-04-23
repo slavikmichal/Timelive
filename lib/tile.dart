@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:timelive/models/event.dart';
 import 'package:timelive/models/tag.dart';
+import 'package:timelive/themes/color_schemer.dart';
 
 import 'icon_indicator.dart';
 
@@ -25,7 +26,7 @@ class Tile extends StatelessWidget {
     return TimelineTile(
       alignment: TimelineAlign.manual,
       lineXY: 0.1,
-      beforeLineStyle: LineStyle(color: Colors.white.withOpacity(0.7)),
+      beforeLineStyle: LineStyle(color: ColorSchemer.vismaBlack.withOpacity(0.7)),
       indicatorStyle: IndicatorStyle(
         indicatorXY: 0.3,
         drawGap: true,
@@ -36,8 +37,7 @@ class Tile extends StatelessWidget {
       isFirst: isFirst,
       isLast: isLast,
       endChild: Padding(
-        padding:
-            const EdgeInsets.only(left: 16, right: 10, top: 10, bottom: 10),
+        padding: const EdgeInsets.only(left: 16, right: 10, top: 10, bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -47,9 +47,9 @@ class Tile extends StatelessWidget {
               children: [
                 Text(
                   event.name,
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.ubuntu(
                     fontSize: 18,
-                    color: Colors.white.withOpacity(0.8),
+                    color: ColorSchemer.textColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -59,7 +59,7 @@ class Tile extends StatelessWidget {
                     _formatDateTime(event.date),
                     style: GoogleFonts.ubuntu(
                       fontSize: 18,
-                      color: Colors.white.withOpacity(0.6),
+                      color: ColorSchemer.textColor,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -68,20 +68,19 @@ class Tile extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              event.tags.map((tag) => tag.name).fold(
-                  '', (previousValue, element) => previousValue + ' #$element'),
-              style: GoogleFonts.lato(
+              event.tags.map((tag) => tag.name).fold('', (previousValue, element) => previousValue + ' #$element'),
+              style: GoogleFonts.ubuntu(
                 fontSize: 16,
-                color: Colors.white.withOpacity(0.8),
+                color: ColorSchemer.textColor,
                 fontWeight: FontWeight.normal,
               ),
             ),
             const SizedBox(height: 4),
             Text(
               event.description,
-              style: GoogleFonts.lato(
+              style: GoogleFonts.ubuntu(
                 fontSize: 14,
-                color: Colors.white.withOpacity(0.6),
+                color: ColorSchemer.textColor,
                 fontWeight: FontWeight.normal,
               ),
             )
@@ -92,6 +91,6 @@ class Tile extends StatelessWidget {
   }
 
   String _formatDateTime(DateTime date) {
-    return "${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}"; // ${date.hour.toString().padLeft(2,'0')}-${date.minute.toString().padLeft(2,'0')}";
+    return "${date.year.toString()}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}"; // ${date.hour.toString().padLeft(2,'0')}-${date.minute.toString().padLeft(2,'0')}";
   }
 }
