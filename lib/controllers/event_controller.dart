@@ -12,7 +12,7 @@ class EventController {
     var event = Event(null, formState.name, formState.description, formState.date, formState.tags);
     
     formState.tags.forEach((tag) {
-      var incr_tag = Tag(tag.id, tag.name, tag.counter+1);
+      var incr_tag = Tag(tag.id, tag.name, tag.counter + 1, tag.color);
       if (tag.counter > 1) { //tag exists, increase counter
         _tagsRef
             .where('id', isEqualTo: tag.id)
