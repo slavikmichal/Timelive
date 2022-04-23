@@ -87,7 +87,8 @@ class _EventScreenState extends State<EventScreen> {
                 date: '13.05.2022',
                 title: 'First one',
                 tags: ['one', 'two', 'three'],
-                description: 'This is a very nice description of this first event',
+                description:
+                    'This is a very nice description of this first event',
                 isFirst: true,
                 isLast: true,
               ),
@@ -99,12 +100,12 @@ class _EventScreenState extends State<EventScreen> {
                 itemExtent: _itemExtent ?? 40,
                 scrollBehavior: kIsWeb
                     ? ScrollConfiguration.of(context).copyWith(
-                  dragDevices: {
-                    // Allows to swipe in web browsers
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.mouse
-                  },
-                )
+                        dragDevices: {
+                          // Allows to swipe in web browsers
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse
+                        },
+                      )
                     : null,
                 loop: true,
                 controller: _controller,
@@ -127,7 +128,9 @@ class _EventScreenState extends State<EventScreen> {
                           borderRadius: BorderRadius.circular(5),
                           boxShadow: kElevationToShadow[2],
                           image: DecorationImage(
-                            image: NetworkImage(kDemoImages[itemIndex]),
+                            image: NetworkImage(
+                              kDemoImages[itemIndex],
+                            ),
                             fit: BoxFit.fill,
                           ),
                         ),
