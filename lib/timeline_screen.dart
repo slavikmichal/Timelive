@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:timelive/sun.dart';
 
-import 'container_header.dart';
 import 'icon_indicator.dart';
 
 class TimelineScreen extends StatelessWidget {
@@ -12,23 +10,19 @@ class TimelineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Events'),
-      // ),
       backgroundColor: Colors.black,
       body: ListView(
         children: <Widget>[
-          TimelineTile(
-            alignment: TimelineAlign.manual,
-            lineXY: 0.3,
-            isFirst: true,
-            indicatorStyle: const IndicatorStyle(
-              width: 30,
-              height: 30,
-              indicator: Sun(),
+          _buildTimelineTile(
+            indicator: const IconIndicator(
+              iconData: Icons.circle,
+              size: 20,
             ),
-            beforeLineStyle: LineStyle(color: Colors.white.withOpacity(0.7)),
-            endChild: const ContainerHeader(),
+            date: '13.05.2022',
+            title: 'First one',
+            tags: ['one', 'two', 'three'],
+            description: 'This is a very nice description of this first event',
+            isFirst: true,
           ),
           _buildTimelineTile(
             indicator: const IconIndicator(
@@ -38,8 +32,8 @@ class TimelineScreen extends StatelessWidget {
             date: '13.05.2022',
             title: 'First one',
             tags: ['one', 'two', 'three'],
-            description:
-            'This is a very nice description of this first event',),
+            description: 'This is a very nice description of this first event',
+          ),
           _buildTimelineTile(
             indicator: const IconIndicator(
               iconData: Icons.circle,
@@ -48,8 +42,8 @@ class TimelineScreen extends StatelessWidget {
             date: '13.05.2022',
             title: 'First one',
             tags: ['one', 'two', 'three'],
-            description:
-            'This is a very nice description of this first event',),
+            description: 'This is a very nice description of this first event',
+          ),
           _buildTimelineTile(
             indicator: const IconIndicator(
               iconData: Icons.circle,
@@ -58,8 +52,8 @@ class TimelineScreen extends StatelessWidget {
             date: '13.05.2022',
             title: 'First one',
             tags: ['one', 'two', 'three'],
-            description:
-            'This is a very nice description of this first event',),
+            description: 'This is a very nice description of this first event',
+          ),
           _buildTimelineTile(
             indicator: const IconIndicator(
               iconData: Icons.circle,
@@ -68,19 +62,9 @@ class TimelineScreen extends StatelessWidget {
             date: '13.05.2022',
             title: 'First one',
             tags: ['one', 'two', 'three'],
-            description:
-            'This is a very nice description of this first event',),
-          _buildTimelineTile(
-            indicator: const IconIndicator(
-              iconData: Icons.circle,
-              size: 20,
-            ),
-            date: '13.05.2022',
-            title: 'First one',
-            tags: ['one', 'two', 'three'],
-            description:
-            'This is a very nice description of this first event',),
-
+            description: 'This is a very nice description of this first event',
+            isLast: true,
+          ),
         ],
       ),
     );
@@ -92,6 +76,7 @@ class TimelineScreen extends StatelessWidget {
     required String title,
     required List<String> tags,
     required String description,
+    bool isFirst = false,
     bool isLast = false,
   }) {
     return TimelineTile(
@@ -105,6 +90,7 @@ class TimelineScreen extends StatelessWidget {
         height: 30,
         indicator: indicator,
       ),
+      isFirst: isFirst,
       isLast: isLast,
       startChild: Center(
         child: Container(
@@ -121,7 +107,7 @@ class TimelineScreen extends StatelessWidget {
       ),
       endChild: Padding(
         padding:
-        const EdgeInsets.only(left: 16, right: 10, top: 10, bottom: 10),
+            const EdgeInsets.only(left: 16, right: 10, top: 10, bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
