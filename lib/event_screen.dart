@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:timelive/line_painter.dart';
 import 'package:timelive/qr_code/screen/generated_qr_code.dart';
 import 'package:timelive/tile.dart';
 
@@ -89,56 +89,68 @@ class _EventScreenState extends State<EventScreen> {
                 tags: ['one', 'two', 'three'],
                 description:
                     'This is a very nice description of this first event',
-                isFirst: true,
-                isLast: true,
+                isFirst: false,
+                isLast: false,
               ),
             ),
-            SizedBox(
-              height: 200,
-              child: InfiniteCarousel.builder(
-                itemCount: kDemoImages.length,
-                itemExtent: _itemExtent ?? 40,
-                scrollBehavior: kIsWeb
-                    ? ScrollConfiguration.of(context).copyWith(
-                        dragDevices: {
-                          // Allows to swipe in web browsers
-                          PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse
-                        },
-                      )
-                    : null,
-                loop: true,
-                controller: _controller,
-                onIndexChanged: (index) {
-                  if (_selectedIndex != index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  }
-                },
-                itemBuilder: (context, itemIndex, realIndex) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        _controller.animateToItem(realIndex);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          boxShadow: kElevationToShadow[2],
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              kDemoImages[itemIndex],
+            Stack(
+              children: [
+                SizedBox(
+                  width: 78.5,
+                  child: CustomPaint(
+                    painter: LinePainter(
+                      MediaQuery.of(context).size.height - 50,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 200,
+                  child: InfiniteCarousel.builder(
+                    itemCount: kDemoImages.length,
+                    itemExtent: _itemExtent ?? 40,
+                    scrollBehavior: kIsWeb
+                        ? ScrollConfiguration.of(context).copyWith(
+                            dragDevices: {
+                              // Allows to swipe in web browsers
+                              PointerDeviceKind.touch,
+                              PointerDeviceKind.mouse
+                            },
+                          )
+                        : null,
+                    loop: true,
+                    controller: _controller,
+                    onIndexChanged: (index) {
+                      if (_selectedIndex != index) {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      }
+                    },
+                    itemBuilder: (context, itemIndex, realIndex) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            _controller.animateToItem(realIndex);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: kElevationToShadow[2],
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  kDemoImages[itemIndex],
+                                ),
+                                fit: BoxFit.fill,
+                              ),
                             ),
-                            fit: BoxFit.fill,
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
