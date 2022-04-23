@@ -22,7 +22,7 @@ class TimeliveApp extends StatelessWidget {
         themeMode: ThemeMode.light,
         theme: ColorSchemer.lightTheme(),
         darkTheme: ColorSchemer.darkTheme(),
-        home: const TimelineScreen(),
+        home: TimelineScreen(),
       ),
     );
   }

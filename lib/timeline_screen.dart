@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timelive/controllers/event_controller.dart';
 import 'package:timelive/event_screen.dart';
 import 'package:timelive/models/event.dart';
@@ -13,7 +14,9 @@ import 'bloc/events_cubit.dart';
 import 'icon_indicator.dart';
 
 class TimelineScreen extends StatelessWidget {
-  const TimelineScreen({Key? key}) : super(key: key);
+  final ItemScrollController _scrollController = ItemScrollController();
+
+  TimelineScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +34,21 @@ class TimelineScreen extends StatelessWidget {
 
             DocumentSnapshot<Event> eventSnapshot = await EventController.getEventById(qrCode.eventId);
             Event? eventData = eventSnapshot.data();
-            _navigateToEventScreen(context, eventData!, 0);
+            _navigateToEvent(context, eventData);
           }),
       // backgroundColor: Colors.black,
-      body: BlocBuilder<EventsCubit, List<Event>>(
-          builder: (context, events) {
-
-            return ListView.builder(
-              itemCount: events.length,
-              itemBuilder: (context, index) => buildTile(
-                context,
-                events.elementAt(index),
-                index,
-                isFirst: index == 0,
-                isLast: index == events.length - 1,
-              ),
-            );
-          }),
+      body: BlocBuilder<EventsCubit, List<Event>>(builder: (context, events) {
+        return ScrollablePositionedList.builder(
+          itemCount: events.length,
+          itemBuilder: (context, index) => buildTile(
+            context,
+            events.elementAt(index),
+            index,
+            isFirst: index == 0,
+            isLast: index == events.length - 1,
+          ),
+        );
+      }),
     );
   }
 
@@ -77,4 +78,12 @@ class TimelineScreen extends StatelessWidget {
       ),
     ));
   }
+
+  void _navigateToEvent(BuildContext context, Event? eventData) {
+    var indexById = context.read<EventsCubit>().getIndexById(eventData!.id!);
+    _scrollController.scrollTo(
+        index: indexById, duration: const Duration(seconds: 1));
+    _navigateToEventScreen(context, eventData, indexById);
+  }
+
 }
