@@ -36,10 +36,11 @@ class TimelineScreen extends StatelessWidget {
             return const Text("Loading");
           }
 
-          final data = snapshot.requireData;
+          final data = snapshot.requireData.docs.map((e) => e.data());
 
-          return ListView(
-            children: data.docs.map((e) => buildTile(context, e.data())).toList(),
+          return ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) => buildTile(context, data.elementAt(index), isFirst: index == 0, isLast: index == data.length - 1),
           );
         }),
     );
