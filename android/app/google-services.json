@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "67776575253",
+    "project_id": "timelive-dd430",
+    "storage_bucket": "timelive-dd430.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67776575253:android:ac17354339748d36ee9b1c",
+        "android_client_info": {
+          "package_name": "com.hack.mnam.timelive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67776575253-na5pddrpvk9d6987ntn0ku4ig757vhu4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBngFUx2t9bNpp0eskPb7p8EHkQbN-v2ys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67776575253-na5pddrpvk9d6987ntn0ku4ig757vhu4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "67776575253-u3ngbnb2qab11ub0osq3fe974asl5tha.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hack.mnam.timelive"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
