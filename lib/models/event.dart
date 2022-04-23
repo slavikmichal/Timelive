@@ -17,7 +17,7 @@ class Event {
   @JsonKey(name: 'tags')
   final List<Tag> tags;
 
-  Event(this.name, this.description, this.date, this.tags);
+  const Event(this.name, this.description, this.date, this.tags);
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
   Map<String, dynamic> toJson() => _$EventToJson(this);
