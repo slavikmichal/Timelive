@@ -28,7 +28,7 @@ class Tile extends StatelessWidget {
   Widget build(BuildContext context) {
     return TimelineTile(
       alignment: TimelineAlign.manual,
-      lineXY: 0.3,
+      lineXY: 0.1,
       beforeLineStyle: LineStyle(color: Colors.white.withOpacity(0.7)),
       indicatorStyle: IndicatorStyle(
         indicatorXY: 0.3,
@@ -39,32 +39,33 @@ class Tile extends StatelessWidget {
       ),
       isFirst: isFirst,
       isLast: isLast,
-      startChild: Center(
-        child: Container(
-          alignment: const Alignment(0.0, -0.50),
-          child: Text(
-            date,
-            style: GoogleFonts.ubuntu(
-              fontSize: 18,
-              color: Colors.white.withOpacity(0.6),
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ),
-      ),
       endChild: Padding(
         padding:
             const EdgeInsets.only(left: 16, right: 10, top: 10, bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              title,
-              style: GoogleFonts.lato(
-                fontSize: 18,
-                color: Colors.white.withOpacity(0.8),
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.lato(
+                    fontSize: 18,
+                    color: Colors.white.withOpacity(0.8),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  date,
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 18,
+                    color: Colors.white.withOpacity(0.6),
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 4),
             Text(

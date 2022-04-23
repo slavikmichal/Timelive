@@ -8,8 +8,9 @@ import 'package:timelive/tile.dart';
 import 'icon_indicator.dart';
 
 class EventScreen extends StatefulWidget {
+  final String id;
 
-  EventScreen({Key? key}) : super(key: key);
+  const EventScreen({Key? key, required this.id}) : super(key: key);
 
   @override
   State<EventScreen> createState() => _EventScreenState();
@@ -67,17 +68,20 @@ class _EventScreenState extends State<EventScreen> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const Tile(
-              indicator: IconIndicator(
-                iconData: Icons.circle,
-                size: 20,
+            Hero(
+              tag: 'event-tag${widget.id}',
+              child: const Tile(
+                indicator: IconIndicator(
+                  iconData: Icons.circle,
+                  size: 20,
+                ),
+                date: '13.05.2022',
+                title: 'First one',
+                tags: ['one', 'two', 'three'],
+                description: 'This is a very nice description of this first event',
+                isFirst: true,
+                isLast: true,
               ),
-              date: '13.05.2022',
-              title: 'First one',
-              tags: ['one', 'two', 'three'],
-              description: 'This is a very nice description of this first event',
-              isFirst: true,
-              isLast: true,
             ),
             SizedBox(
               height: 200,
