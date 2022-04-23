@@ -26,7 +26,7 @@ class Tile extends StatelessWidget {
     return TimelineTile(
       alignment: TimelineAlign.manual,
       lineXY: 0.1,
-      beforeLineStyle: LineStyle(color: ColorSchemer.vismaBlack.withOpacity(0.7)),
+      beforeLineStyle: LineStyle(color: ColorSchemer.palicaColor),
       indicatorStyle: IndicatorStyle(
         indicatorXY: 0.3,
         drawGap: true,

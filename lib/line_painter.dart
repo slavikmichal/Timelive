@@ -12,7 +12,7 @@ class LinePainter extends CustomPainter {
     final centerAxis = size.width / 2;
     final beginTopLine = Offset(centerAxis, 0);
     final beforeLinePaint = Paint()
-      ..color = ColorSchemer.vismaBlack.withOpacity(0.7)
+      ..color = ColorSchemer.palicaColor
       ..strokeWidth = 4;
     final endTopLine = Offset(centerAxis, height);
     canvas.drawLine(beginTopLine, endTopLine, beforeLinePaint);
