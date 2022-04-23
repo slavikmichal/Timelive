@@ -24,17 +24,17 @@ class TimelineScreen extends StatelessWidget {
               SnackBar(content: Text('Scanned data: ${value?.toJson().toString()}')),
             );
           }),
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
       body: StreamBuilder<QuerySnapshot<Event>>(
-        stream: EventController.getEventsStream(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Something went wrong');
-          }
+          stream: EventController.getEventsStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Text('Something went wrong');
+            }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text("Loading");
-          }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text("Loading");
+            }
 
           final data = snapshot.requireData.docs.map((e) => e.data());
 
@@ -46,14 +46,12 @@ class TimelineScreen extends StatelessWidget {
     );
   }
 
-  Widget buildTile(
-      BuildContext context,
-      Event event, {
-      bool isFirst = false,
-      bool isLast = false}) {
+  Widget buildTile(BuildContext context, Event event, {bool isFirst = false, bool isLast = false}) {
     return InkWell(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => EventScreen(event: event,),
+        builder: (_) => EventScreen(
+          event: event,
+        ),
       )),
       child: Hero(
         tag: 'event-tag$event.id!',

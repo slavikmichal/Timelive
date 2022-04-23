@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:timelive/models/tag.dart';
@@ -16,7 +15,6 @@ class QrCodeData {
   const QrCodeData(this.eventId, this.created);
 
   factory QrCodeData.fromJson(Map<String, dynamic> json) => _$QrCodeDataFromJson(json);
+
   Map<String, dynamic> toJson() => _$QrCodeDataToJson(this);
-
 }
-

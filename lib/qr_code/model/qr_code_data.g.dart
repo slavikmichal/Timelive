@@ -11,8 +11,7 @@ QrCodeData _$QrCodeDataFromJson(Map<String, dynamic> json) => QrCodeData(
       DateTime.parse(json['created'] as String),
     );
 
-Map<String, dynamic> _$QrCodeDataToJson(QrCodeData instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$QrCodeDataToJson(QrCodeData instance) => <String, dynamic>{
       'eventId': instance.eventId,
       'created': instance.created.toIso8601String(),
     };

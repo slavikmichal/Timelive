@@ -72,7 +72,7 @@ class _EventScreenState extends State<EventScreen> {
           builder: (_) => GeneratedQrCodeScreen(eventId: widget.event.id!),
         )),
       ),
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
       body: SafeArea(
         child: Column(
           children: [
