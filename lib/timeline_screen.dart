@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:timelive/bloc/zoom_cubit.dart';
 import 'package:timelive/controllers/event_controller.dart';
-import 'package:timelive/data/data_generator.dart';
 import 'package:timelive/event_screen.dart';
 import 'package:timelive/models/event.dart';
+import 'package:timelive/models/timeline_zoom.dart';
 import 'package:timelive/qr_code/model/qr_code_data.dart';
 import 'package:timelive/qr_code/scanner/qr_scanner.dart';
 import 'package:timelive/tile.dart';
@@ -25,11 +25,11 @@ class TimelineScreen extends StatelessWidget {
       persistentFooterButtons: [
         IconButton(
           icon: const Icon(Icons.add),
-          onPressed: () => DataGenerator.generateSomeData(),
+          onPressed: () => context.read<ZoomCubit>().zoomIn(),
         ),
         IconButton(
           icon: const Icon(Icons.remove),
-          onPressed: () => DataGenerator.clearGeneratedData(),
+          onPressed: () => context.read<ZoomCubit>().zoomOut(),
         )
       ],
       floatingActionButton: FloatingActionButton(
@@ -48,26 +48,31 @@ class TimelineScreen extends StatelessWidget {
             _navigateToEvent(context, eventData);
           }),
       // backgroundColor: Colors.black,
-      body: BlocBuilder<EventsCubit, List<Event>>(builder: (context, events) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 20.0),
-          child: ScrollablePositionedList.builder(
-            itemScrollController: _scrollController,
-            itemCount: events.length,
-            itemBuilder: (context, index) => buildTile(
-              context,
-              events.elementAt(index),
-              index,
-              isFirst: index == 0,
-              isLast: index == events.length - 1,
-            ),
-          ),
-        );
-      }),
+      body: BlocBuilder<ZoomCubit, TimelineZoom>(
+        builder: (context, zoom) => BlocBuilder<EventsCubit, List<Event>>(
+          builder: (context, events) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: ScrollablePositionedList.builder(
+                itemScrollController: _scrollController,
+                itemCount: events.length,
+                itemBuilder: (context, index) => buildTile(
+                  context,
+                  events.elementAt(index),
+                  index,
+                  zoom,
+                  isFirst: index == 0,
+                  isLast: index == events.length - 1,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 
-  Widget buildTile(BuildContext context, Event event, int index, {bool isFirst = false, bool isLast = false}) {
+  Widget buildTile(BuildContext context, Event event, int index, TimelineZoom zoom, {bool isFirst = false, bool isLast = false}) {
     return InkWell(
       onTap: () => _navigateToEventScreen(context, event, index),
       child: Hero(
@@ -78,6 +83,7 @@ class TimelineScreen extends StatelessWidget {
             size: 20,
           ),
           event: event,
+          zoom: zoom,
           isFirst: isFirst,
           isLast: isLast,
         ),
@@ -96,9 +102,7 @@ class TimelineScreen extends StatelessWidget {
 
   void _navigateToEvent(BuildContext context, Event? eventData) {
     var indexById = context.read<EventsCubit>().getIndexById(eventData!.id!);
-    _scrollController.scrollTo(
-        index: indexById, duration: const Duration(seconds: 1));
+    _scrollController.scrollTo(index: indexById, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
     _navigateToEventScreen(context, eventData, indexById);
   }
-
 }
