@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timelive/models/event_form_state.dart';
+import 'package:timelive/models/timeline_zoom.dart';
 import 'package:timelive/tile.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
@@ -165,6 +166,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       isLast: false,
       event: Event(null, 'Create new event', '', DateTime.now(), []),
       showDate: false,
+      zoom: TimelineZoom.shortDescription,
     );
   }
 
