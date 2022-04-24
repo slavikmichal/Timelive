@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timelive/models/tag.dart';
 
 class FiltersCubit extends Cubit<List<Tag>> {
-  late final List<Tag> activeTags;
+  late List<Tag> activeTags = [];
 
   FiltersCubit() : super([]);
 

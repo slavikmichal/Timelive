@@ -1,17 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timelive/controllers/event_controller.dart';
 import 'package:timelive/models/event_form_state.dart';
+import 'package:timelive/models/tag.dart';
 import 'package:timelive/models/timeline_zoom.dart';
 
 import '../models/event.dart';
 
 class EventsCubit extends Cubit<List<Event>> {
-  late final List<Event> events;
+  late List<Event> events;
 
   EventsCubit() : super([]);
 
-  void refreshEvents() async {
-    events = await EventController.getAllEvents();
+  void refreshEvents(List<Tag> activeTags) async {
+    events = await EventController.getAllEvents(activeTags);
     emit(events);
   }
 
@@ -55,11 +57,6 @@ class EventsCubit extends Cubit<List<Event>> {
     var month = date.month.toString().padLeft(2, '0');
     var year = date.year.toString();
     return "$day.$month.$year";
-  }
-
-  void addEvent(EventFormState eventFormState) {
-    EventController.addEvent(eventFormState);
-    refreshEvents();
   }
 
   Event getEventById(String id) {

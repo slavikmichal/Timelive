@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:timelive/bloc/events_cubit.dart';
+import 'package:timelive/bloc/filters_cubit.dart';
 import 'package:timelive/models/tag.dart';
 import 'package:timelive/themes/color_schemer.dart';
 
 class TagFilters extends StatefulWidget {
   final List<Tag> allTags;
+  final List<Tag> activeTags;
 
-  const TagFilters({Key? key, required this.allTags}) : super(key: key);
+  const TagFilters({Key? key, required this.allTags, required this.activeTags}) : super(key: key);
 
   @override
   _TagFiltersState createState() => _TagFiltersState();
@@ -14,16 +18,19 @@ class TagFilters extends StatefulWidget {
 
 class _TagFiltersState extends State<TagFilters> {
   TextEditingController inputController = TextEditingController();
+  ScrollController upperController = ScrollController();
+  ScrollController lowerController = ScrollController();
   List<Tag> selectedTags = [];
   List<Tag> notSelectedTags = [];
   List<Tag> showedTags = [];
-
 
   @override
   void initState() {
     super.initState();
 
-    showedTags = widget.allTags;
+    showedTags =
+        widget.allTags.where((element) => !widget.activeTags.map((e) => e.name).contains(element.name)).toList();
+    selectedTags = widget.activeTags;
     notSelectedTags = widget.allTags;
   }
 
@@ -31,7 +38,7 @@ class _TagFiltersState extends State<TagFilters> {
     setState(() {
       selectedTags.add(tag);
       notSelectedTags.removeWhere((t) => t.name == tag.name);
-      showedTags = notSelectedTags;
+      showedTags.removeWhere((element) => element.name == tag.name);
     });
   }
 
@@ -47,7 +54,7 @@ class _TagFiltersState extends State<TagFilters> {
 
       notSelectedTags.add(tagToRemove);
       selectedTags.remove(tagToRemove);
-      showedTags = notSelectedTags;
+      showedTags.add(tagToRemove);
     });
   }
 
@@ -60,7 +67,7 @@ class _TagFiltersState extends State<TagFilters> {
         _buildTextForm((val) => _onType(widget.allTags, val)),
         _buildTagList(),
         _buildSelectedTags(),
-        _buildApplyFiltersButton()
+        _buildApplyFiltersButton(selectedTags, context),
       ]),
     );
   }
@@ -80,18 +87,19 @@ class _TagFiltersState extends State<TagFilters> {
   }
 
   Widget _buildTagList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: showedTags.length,
-      itemBuilder: (context, index) =>
-          ListTile(
-            onTap: () => _selectFilter(showedTags.elementAt(index)),
-            title: Text(
-              showedTags
-                  .elementAt(index)
-                  .name,
-            ),
+    return Container(
+      height: 250,
+      child: ListView.builder(
+        controller: upperController,
+        shrinkWrap: true,
+        itemCount: showedTags.length,
+        itemBuilder: (context, index) => ListTile(
+          onTap: () => _selectFilter(showedTags.elementAt(index)),
+          title: Text(
+            showedTags.elementAt(index).name,
           ),
+        ),
+      ),
     );
   }
 
@@ -111,13 +119,21 @@ class _TagFiltersState extends State<TagFilters> {
   }
 
   Widget _buildSelectedTags() {
-    return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Wrap(
-          spacing: 6,
-          runSpacing: 6,
-          children: selectedTags.map((e) => _buildChip(e.name, Color(e.color))).toList(),
-        )
+    return Container(
+      height: 250,
+      child: ListView(
+        controller: lowerController,
+        shrinkWrap: true,
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(10),
+              child: Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: selectedTags.map((e) => _buildChip(e.name, Color(e.color))).toList(),
+              ))
+        ],
+      ),
     );
   }
 
@@ -141,7 +157,13 @@ class _TagFiltersState extends State<TagFilters> {
     );
   }
 
-  Widget _buildApplyFiltersButton() {
-    return TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("Apply filters"));
+  Widget _buildApplyFiltersButton(List<Tag> activeFilters, BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          context.read<FiltersCubit>().setFilters(activeFilters);
+          context.read<EventsCubit>().refreshEvents(activeFilters);
+          Navigator.of(context).pop();
+        },
+        child: const Text("Apply filters"));
   }
 }

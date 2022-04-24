@@ -2,10 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:timelive/bloc/filters_cubit.dart';
 import 'package:timelive/bloc/zoom_cubit.dart';
 import 'package:timelive/controllers/event_controller.dart';
-import 'package:timelive/create_event_screen.dart';
-import 'package:timelive/data/data_generator.dart';
 import 'package:timelive/event_screen.dart';
 import 'package:timelive/models/event.dart';
 import 'package:timelive/models/tag.dart';
@@ -14,6 +13,7 @@ import 'package:timelive/qr_code/model/qr_code_data.dart';
 import 'package:timelive/qr_code/scanner/qr_scanner.dart';
 import 'package:timelive/tag_filters.dart';
 import 'package:timelive/tile.dart';
+
 import 'bloc/events_cubit.dart';
 import 'icon_indicator.dart';
 
@@ -24,6 +24,7 @@ class TimelineScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<EventsCubit>().refreshEvents(context.read<FiltersCubit>().activeTags);
     return Scaffold(
       persistentFooterButtons: [
         IconButton(
@@ -59,12 +60,12 @@ class TimelineScreen extends StatelessWidget {
       drawer: Drawer(
         elevation: 10,
         child: FutureBuilder(
-            future: EventController.getTags(),
-            builder: (context, AsyncSnapshot<List<Tag>> snapshot) {
+            future: EventController.getAllTags(),
+            builder: (_context, AsyncSnapshot<List<Tag>> snapshot) {
               if (snapshot.hasData) {
                 List<Tag> loadedTags = snapshot.data!.toList();
 
-                return TagFilters(allTags: loadedTags);
+                return TagFilters(allTags: loadedTags, activeTags: context.read<FiltersCubit>().activeTags,);
               } else {
                 return Column(
                   children: const [

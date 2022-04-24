@@ -1,12 +1,7 @@
-import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faker/faker.dart';
 import 'package:timelive/controllers/event_controller.dart';
-import 'package:timelive/models/event.dart';
 import 'package:timelive/models/event_form_state.dart';
 import 'package:timelive/models/tag.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
-import 'package:faker/faker.dart';
 
 class DataGenerator {
 
@@ -45,9 +40,4 @@ class DataGenerator {
 
     return event;
   }
-
-  static clearGeneratedData() async {
-    await EventController.deleteGeneratedEvents();
-  }
-
 }
