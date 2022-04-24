@@ -62,7 +62,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   _addDate(context),
                   const SizedBox(height: 20),
                   _addTags(context),
-                  const SizedBox(height: 20),
                   _uploadImages(),
                   const SizedBox(height: 20),
                   _saveEvent(context),
@@ -224,18 +223,18 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   Widget _uploadImages() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Divider(),
         Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               'Upload images'.toUpperCase(),
               textAlign: TextAlign.center,
               // overflow: TextOverflow,
               style: GoogleFonts.ubuntu(
-                fontSize: 20,
+                fontSize: 18,
                 color: ColorSchemer.textColor,
                 fontWeight: FontWeight.bold,
               ),
