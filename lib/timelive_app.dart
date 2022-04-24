@@ -27,6 +27,7 @@ class TimeliveApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Timelive',
           // themeMode: ThemeMode.system,
           themeMode: ThemeMode.light,

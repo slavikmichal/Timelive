@@ -51,7 +51,6 @@ class _ImagesDetailScreenState extends State<ImagesDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTap: () => Navigator.pop(context),
         child: Center(
           child: Hero(
             tag: 'imageHero',
@@ -70,7 +69,7 @@ class _ImagesDetailScreenState extends State<ImagesDetailScreen> {
                         },
                       )
                     : null,
-                loop: true,
+                loop: false,
                 controller: _controller,
                 onIndexChanged: (index) {
                   if (_selectedIndex != index) {

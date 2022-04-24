@@ -4,13 +4,13 @@ import 'package:timelive/models/event_form_state.dart';
 import 'package:timelive/models/tag.dart';
 
 class DataGenerator {
-
-  static const int elementsCountToGenerate = 5;
+  static const int elementsCountToGenerate = 50;
 
   static List<Tag> allTags = [];
+
   static Faker get faker => Faker();
 
-  static void generateSomeData() async {
+  static Future<int> generateSomeData() async {
     if (allTags.isEmpty) {
       allTags = await EventController.getAllTags();
     }
@@ -19,6 +19,8 @@ class DataGenerator {
       var generatedEvent = generateEvent();
       EventController.addEvent(generatedEvent);
     }
+
+    return elementsCountToGenerate;
   }
 
   static EventFormState generateEvent() {
@@ -39,5 +41,9 @@ class DataGenerator {
     }
 
     return event;
+  }
+
+  static clearGeneratedData(List<Tag> activeFilters) async {
+    await EventController.deleteGeneratedEvents(activeFilters);
   }
 }

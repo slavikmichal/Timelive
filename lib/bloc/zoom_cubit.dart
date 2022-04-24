@@ -19,19 +19,16 @@ class ZoomCubit extends Cubit<TimelineZoom> {
       case TimelineZoom.day:
         {
           emit(TimelineZoom.shortDescription);
-
           break;
         }
       case TimelineZoom.shortDescription:
         {
           emit(TimelineZoom.fullDescription);
-
           break;
         }
       case TimelineZoom.fullDescription:
         {
           emit(TimelineZoom.fullDescription);
-
           break;
         }
     }
@@ -52,19 +49,16 @@ class ZoomCubit extends Cubit<TimelineZoom> {
       case TimelineZoom.day:
         {
           emit(TimelineZoom.month);
-
           break;
         }
       case TimelineZoom.shortDescription:
         {
           emit(TimelineZoom.day);
-
           break;
         }
       case TimelineZoom.fullDescription:
         {
           emit(TimelineZoom.shortDescription);
-
           break;
         }
     }

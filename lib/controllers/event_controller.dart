@@ -80,4 +80,11 @@ class EventController {
       }
     });
   }
+
+  static Future<void> deleteGeneratedEvents(List<Tag> activeFilters) async {
+    var events = await getAllEvents(activeFilters);
+    events.where((Event element) => element.description.length > 40)
+        .toList()
+        .forEach((Event element) => _eventsRef.doc(element.id).delete());
+  }
 }
