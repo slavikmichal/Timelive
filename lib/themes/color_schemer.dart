@@ -6,13 +6,15 @@ class ColorSchemer {
   static Color vismaBlack = VismaColorScheme.black;
   static Color textColor = VismaColorScheme.black;
 
+  static Color buttonColor = VismaColorScheme.orange;
+
   // vertical line
   static Color palicaColor = vismaBlack.withOpacity(0.5);
 
   // shadow around dots on palice
   static Color indicatorShadowColor = VismaColorScheme.shadow;
 
-  static ThemeData lightTheme() => ThemeData(primarySwatch: Colors.pink);
+  static ThemeData lightTheme() => ThemeData(primarySwatch: Colors.red);
 
   static ThemeData darkTheme() => ThemeData.dark();
 

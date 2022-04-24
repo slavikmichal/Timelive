@@ -69,8 +69,9 @@ class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.qr_code),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Generate QR Code'),
+        icon: const Icon(Icons.qr_code),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => GeneratedQrCodeScreen(eventId: widget.event.id!),
         )),
