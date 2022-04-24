@@ -108,22 +108,14 @@ class Tile extends StatelessWidget {
   String _getTitleByZoom(Event event) {
     switch (zoom) {
       case TimelineZoom.year:
-        {
           return event.date.year.toString();
-        }
       case TimelineZoom.month:
-        {
           return _formatDateTime(event.date).substring(3);
-        }
       case TimelineZoom.day:
-        {
           return _formatDateTime(event.date);
-        }
       case TimelineZoom.shortDescription:
       case TimelineZoom.fullDescription:
-        {
           return event.name;
-        }
     }
   }
 }
