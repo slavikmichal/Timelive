@@ -24,7 +24,7 @@ class EventController {
   }
 
   static Future<List<Event>> getAllEvents() async {
-    final eventsSnapshot = await _eventsRef.get();
+    final eventsSnapshot = await _eventsRef.orderBy('date', descending: true).get();
     return eventsSnapshot.docs.map((e) => e.data()).toList();
   }
 

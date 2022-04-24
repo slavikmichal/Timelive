@@ -39,7 +39,7 @@ class Tile extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16, right: 10, top: 10, bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
