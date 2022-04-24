@@ -2,7 +2,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:timelive/bloc/filters_cubit.dart';
+import 'package:timelive/controllers/event_controller.dart';
 import 'package:timelive/line_painter.dart';
 import 'package:timelive/models/event.dart';
 import 'package:timelive/models/timeline_zoom.dart';
@@ -24,6 +27,8 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen> {
   static const textShift = 0.19988425925925924769188314471879;
+  late DragStartDetails startVerticalDragDetails;
+  late DragUpdateDetails updateVerticalDragDetails;
 
   // List<String> kDemoImages = [
   //   'https://i.pinimg.com/originals/7f/91/a1/7f91a18bcfbc35570c82063da8575be8.jpg',
@@ -71,54 +76,77 @@ class _EventScreenState extends State<EventScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        label: Text('Generate QR Code'),
+        label: const Text('Generate QR Code'),
         icon: const Icon(Icons.qr_code),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => GeneratedQrCodeScreen(event: widget.event),
         )),
       ),
       // backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            Hero(
-              tag: 'event-tag${widget.index}',
-              child: Tile(
-                indicator: const IconIndicator(
-                  iconData: Icons.circle,
-                  size: 20,
+      body: GestureDetector(
+        onVerticalDragStart: (dragDetails) {
+          startVerticalDragDetails = dragDetails;
+        },
+        onVerticalDragUpdate: (dragDetails) {
+          updateVerticalDragDetails = dragDetails;
+        },
+        onVerticalDragEnd: (endDetails) {
+          double dx = updateVerticalDragDetails.globalPosition.dx - startVerticalDragDetails.globalPosition.dx;
+          double dy = updateVerticalDragDetails.globalPosition.dy - startVerticalDragDetails.globalPosition.dy;
+          double velocity = endDetails.primaryVelocity!;
+
+          //Convert values to be positive
+          if (dx < 0) dx = -dx;
+          if (dy < 0) dy = -dy;
+
+          if (velocity < 0) {
+            _onSwipeUp(context, widget.event.id!);
+          } else {
+            _onSwipeDown(context, widget.event.id!);
+          }
+        },
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              Hero(
+                tag: 'event-tag${widget.index}',
+                child: Tile(
+                  indicator: const IconIndicator(
+                    iconData: Icons.circle,
+                    size: 20,
+                  ),
+                  zoom: TimelineZoom.fullDescription,
+                  event: widget.event,
+                  isFirst: false,
+                  isLast: false,
                 ),
-                zoom: TimelineZoom.fullDescription,
-                event: widget.event,
-                isFirst: false,
-                isLast: false,
               ),
-            ),
-            Stack(
-              children: [
-                SizedBox(
-                  width: screenWidth * textShift,
-                  child: CustomPaint(
-                    painter: LinePainter(
-                      MediaQuery.of(context).size.height - 50,
+              Stack(
+                children: [
+                  SizedBox(
+                    width: screenWidth * textShift,
+                    child: CustomPaint(
+                      painter: LinePainter(
+                        MediaQuery.of(context).size.height - 50,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 200,
-                  child: FutureBuilder(
-                    future: _loadImages(),
-                    builder: (context, AsyncSnapshot<List<String>> snapshot) {
-                      var urls = snapshot.data ?? [];
-                      return urls.isNotEmpty ? _carousel(context, urls) : const Text('');
-                    },
+                  SizedBox(
+                    height: 200,
+                    child: FutureBuilder(
+                      future: _loadImages(),
+                      builder: (context, AsyncSnapshot<List<String>> snapshot) {
+                        var urls = snapshot.data ?? [];
+                        return urls.isNotEmpty ? _carousel(context, urls) : const Text('');
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -192,5 +220,33 @@ class _EventScreenState extends State<EventScreen> {
     });
 
     return paths;
+  }
+
+  void _onSwipeDown(BuildContext context, String eventId) async {
+    final allEvents = await EventController.getAllEvents(context.read<FiltersCubit>().state);
+    final eventIndex = allEvents.indexWhere((element) => element.id == eventId);
+    if (eventIndex - 1 >= 0) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (_) =>
+            EventScreen(
+              event: allEvents.elementAt(eventIndex - 1),
+              index: eventIndex - 1,
+            ),
+      ));
+    }
+  }
+
+  void _onSwipeUp(BuildContext context, String eventId) async {
+    final allEvents = await EventController.getAllEvents(context.read<FiltersCubit>().state);
+    final eventIndex = allEvents.indexWhere((element) => element.id == eventId);
+    if (eventIndex + 1 < allEvents.length) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (_) =>
+            EventScreen(
+              event: allEvents.elementAt(eventIndex + 1),
+              index: eventIndex,
+            ),
+      ));
+    }
   }
 }
