@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timelive/bloc/zoom_cubit.dart';
 import 'package:timelive/controllers/event_controller.dart';
+import 'package:timelive/create_event_screen.dart';
+import 'package:timelive/data/data_generator.dart';
 import 'package:timelive/event_screen.dart';
 import 'package:timelive/models/event.dart';
 import 'package:timelive/models/tag.dart';
@@ -14,9 +17,9 @@ import 'package:timelive/tag_filters.dart';
 import 'package:timelive/themes/color_schemer.dart';
 import 'package:timelive/tile.dart';
 import 'package:timelive/widget/CommonScaffold.dart';
+
 import 'bloc/events_cubit.dart';
 import 'icon_indicator.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class TimelineScreen extends StatelessWidget {
   final ItemScrollController _scrollController = ItemScrollController();
