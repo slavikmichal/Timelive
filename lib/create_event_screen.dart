@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:timelive/models/event_form_state.dart';
 import 'package:timelive/models/timeline_zoom.dart';
+import 'package:timelive/themes/color_schemer.dart';
 import 'package:timelive/tile.dart';
 
 import 'controllers/event_controller.dart';
@@ -95,7 +97,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   Widget _addTagButton() {
     return ElevatedButton(
-      child: const Text("Add"),
+      child: const Text("Add Tag"),
       onPressed: () {
         if (_textController.value.text != '') {
           setState(() {
@@ -109,7 +111,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   Widget _saveEvent(BuildContext context) {
     return ElevatedButton(
-      child: const Text("Create event"),
+      child: Text("Create event".toUpperCase()),
       onPressed: () {
         EventController.addEvent(_formState);
         //TODO confirmation
@@ -224,7 +226,22 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Upload images"),
+        const Divider(),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              'Upload images'.toUpperCase(),
+              textAlign: TextAlign.center,
+              // overflow: TextOverflow,
+              style: GoogleFonts.ubuntu(
+                fontSize: 20,
+                color: ColorSchemer.textColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -243,6 +260,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             ),
           ],
         ),
+        const Divider(),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[for (var item in _formState.images) Text(basename(item.path))],
