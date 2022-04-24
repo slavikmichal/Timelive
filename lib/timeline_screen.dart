@@ -4,13 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timelive/bloc/zoom_cubit.dart';
 import 'package:timelive/controllers/event_controller.dart';
+import 'package:timelive/create_event_screen.dart';
+import 'package:timelive/data/data_generator.dart';
 import 'package:timelive/event_screen.dart';
 import 'package:timelive/models/event.dart';
+import 'package:timelive/models/tag.dart';
 import 'package:timelive/models/timeline_zoom.dart';
 import 'package:timelive/qr_code/model/qr_code_data.dart';
 import 'package:timelive/qr_code/scanner/qr_scanner.dart';
+import 'package:timelive/tag_filters.dart';
 import 'package:timelive/tile.dart';
-
 import 'bloc/events_cubit.dart';
 import 'icon_indicator.dart';
 
@@ -53,8 +56,33 @@ class TimelineScreen extends StatelessWidget {
             Event? eventData = eventSnapshot.data();
             _navigateToEvent(context, eventData);
           }),
-      // backgroundColor: Colors.black,
-      body: BlocBuilder<ZoomCubit, TimelineZoom>(
+      drawer: Drawer(
+        elevation: 10,
+        child: FutureBuilder(
+            future: EventController.getTags(),
+            builder: (context, AsyncSnapshot<List<Tag>> snapshot) {
+              if (snapshot.hasData) {
+                List<Tag> loadedTags = snapshot.data!.toList();
+
+                return TagFilters(allTags: loadedTags);
+              } else {
+                return Column(
+                  children: const [
+                    SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: CircularProgressIndicator(),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text('Awaiting result...'),
+                    )
+                  ],
+                );
+              }
+            }),
+      ),
+     body: BlocBuilder<ZoomCubit, TimelineZoom>(
         builder: (context, zoom) => BlocBuilder<EventsCubit, List<Event>>(
           builder: (context, events) {
             return Padding(
@@ -108,7 +136,11 @@ class TimelineScreen extends StatelessWidget {
 
   void _navigateToEvent(BuildContext context, Event? eventData) {
     var indexById = context.read<EventsCubit>().getIndexById(eventData!.id!);
-    _scrollController.scrollTo(index: indexById, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+    _scrollController.scrollTo(
+      index: indexById,
+      duration: const Duration(seconds: 3),
+      curve: Curves.fastOutSlowIn
+    );
     _navigateToEventScreen(context, eventData, indexById);
   }
 }

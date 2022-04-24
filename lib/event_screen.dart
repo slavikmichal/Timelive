@@ -6,6 +6,7 @@ import 'package:timelive/line_painter.dart';
 import 'package:timelive/models/event.dart';
 import 'package:timelive/models/timeline_zoom.dart';
 import 'package:timelive/qr_code/screen/generated_qr_code.dart';
+import 'package:timelive/screen/image_detail_screen.dart';
 import 'package:timelive/tile.dart';
 
 import 'icon_indicator.dart';
@@ -131,6 +132,12 @@ class _EventScreenState extends State<EventScreen> {
                         child: GestureDetector(
                           onTap: () {
                             _controller.animateToItem(realIndex);
+                            Navigator.push(context, MaterialPageRoute(builder: (context) {
+                              return ImagesDetailScreen(
+                                urls: kDemoImages,
+                                startIndex: itemIndex,
+                              );
+                            }));
                           },
                           child: Container(
                             decoration: BoxDecoration(
