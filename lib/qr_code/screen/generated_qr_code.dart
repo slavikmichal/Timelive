@@ -9,6 +9,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:timelive/models/event.dart';
 import 'package:path/path.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:timelive/widget/CommonScaffold.dart';
 
 import '../../themes/color_schemer.dart';
 import '../generator/qr_generator.dart';
@@ -60,7 +61,7 @@ class GeneratedQrCodeScreen extends StatelessWidget {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             content: ElevatedButton(
-                                onPressed: () => saveQr(),
+                                onPressed: () => saveQr(context),
                                 child: Text("Save image")),
                           );
                         }),
@@ -76,7 +77,7 @@ class GeneratedQrCodeScreen extends StatelessWidget {
     );
   }
 
-  saveQr() async {
+  saveQr(BuildContext context) async {
     final directory = (await getApplicationDocumentsDirectory()).path;
     screenshotController.capture().then((Uint8List? image) async {
       if (image != null) {
@@ -84,9 +85,12 @@ class GeneratedQrCodeScreen extends StatelessWidget {
           final String fullPath = '$directory/${DateTime.now().millisecond}.png';
           File capturedFile = File(fullPath);
           await capturedFile.writeAsBytes(image);
-          print(capturedFile.path);
           await GallerySaver.saveImage(capturedFile.path).then((value) {
-            print('PRINTED');
+            Navigator.pop(context);
+            ScaffoldMessengerManager.publish(
+              context,
+              const Text('Image downloaded.'),
+            );
           });
         } catch (error) {}
       }
