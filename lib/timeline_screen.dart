@@ -28,6 +28,7 @@ class TimelineScreen extends StatelessWidget {
       persistentFooterButtons: [
         IconButton(
           icon: const Icon(Icons.add),
+          // onPressed: () => DataGenerator.generateSomeData(),
           onPressed: () => context.read<ZoomCubit>().zoomIn(),
         ),
         IconButton(
@@ -36,6 +37,7 @@ class TimelineScreen extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.add_a_photo),
+          // onPressed: () => DataGenerator.clearGeneratedData(),
           onPressed: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => const CreateEventScreen(),
           )),
@@ -136,7 +138,11 @@ class TimelineScreen extends StatelessWidget {
 
   void _navigateToEvent(BuildContext context, Event? eventData) {
     var indexById = context.read<EventsCubit>().getIndexById(eventData!.id!);
-    _scrollController.scrollTo(index: indexById, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+    _scrollController.scrollTo(
+      index: indexById,
+      duration: const Duration(seconds: 3),
+      curve: Curves.fastOutSlowIn
+    );
     _navigateToEventScreen(context, eventData, indexById);
   }
 }
