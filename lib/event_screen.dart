@@ -156,6 +156,7 @@ class _EventScreenState extends State<EventScreen> {
                 return ImagesDetailScreen(
                   urls: data,
                   startIndex: itemIndex,
+                  eventId: widget.event.id ?? '',
                 );
               }));
             },
