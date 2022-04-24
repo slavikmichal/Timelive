@@ -52,6 +52,7 @@ class TimelineScreen extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.only(top: 20.0),
           child: ScrollablePositionedList.builder(
+            itemScrollController: _scrollController,
             itemCount: events.length,
             itemBuilder: (context, index) => buildTile(
               context,
