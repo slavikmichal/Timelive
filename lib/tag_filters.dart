@@ -62,19 +62,22 @@ class _TagFiltersState extends State<TagFilters> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(30),
-      child: Column(children: [
-        _buildTitle(),
-        _buildTextForm((val) => _onType(widget.allTags, val)),
-        _buildTagList(),
-        _buildSelectedTags(),
-        _buildApplyFiltersButton(selectedTags, context),
-      ]),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildTitle(),
+          _buildTextForm((val) => _onType(widget.allTags, val)),
+          _buildTagList(),
+          _buildSelectedTags(),
+          _buildApplyFiltersButton(selectedTags, context),
+        ],
+      ),
     );
   }
 
   Widget _buildTitle() {
     return Padding(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.only(top: 15),
       child: Text(
         'Filters',
         style: GoogleFonts.ubuntu(
@@ -88,15 +91,20 @@ class _TagFiltersState extends State<TagFilters> {
 
   Widget _buildTagList() {
     return Container(
+      decoration: _decoration(),
       height: 250,
-      child: ListView.builder(
+      child: Scrollbar(
         controller: upperController,
-        shrinkWrap: true,
-        itemCount: showedTags.length,
-        itemBuilder: (context, index) => ListTile(
-          onTap: () => _selectFilter(showedTags.elementAt(index)),
-          title: Text(
-            showedTags.elementAt(index).name,
+        isAlwaysShown: true,
+        child: ListView.builder(
+          controller: upperController,
+          shrinkWrap: true,
+          itemCount: showedTags.length,
+          itemBuilder: (context, index) => ListTile(
+            onTap: () => _selectFilter(showedTags.elementAt(index)),
+            title: Text(
+              showedTags.elementAt(index).name,
+            ),
           ),
         ),
       ),
@@ -105,14 +113,20 @@ class _TagFiltersState extends State<TagFilters> {
 
   Widget _buildTextForm(ValueChanged<String> onChanged) {
     return Padding(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextField(
         onChanged: onChanged,
         controller: inputController,
+        decoration: const InputDecoration(
+          labelText: 'Fulltext search',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+        ),
         style: GoogleFonts.ubuntu(
-          fontSize: 18,
+          fontSize: 14,
           color: ColorSchemer.textColor,
-          fontWeight: FontWeight.bold,
+          // fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -120,19 +134,33 @@ class _TagFiltersState extends State<TagFilters> {
 
   Widget _buildSelectedTags() {
     return Container(
+      decoration: _decoration(),
       height: 250,
-      child: ListView(
+      child: Scrollbar(
         controller: lowerController,
-        shrinkWrap: true,
-        children: [
-          Padding(
-              padding: const EdgeInsets.all(10),
-              child: Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: selectedTags.map((e) => _buildChip(e.name, Color(e.color))).toList(),
-              ))
-        ],
+        isAlwaysShown: true,
+        child: ListView(
+          controller: lowerController,
+          shrinkWrap: true,
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(10),
+                child: Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: selectedTags.map((e) => _buildChip(e.name, Color(e.color))).toList(),
+                ))
+          ],
+        ),
+      ),
+    );
+  }
+
+  BoxDecoration _decoration() {
+    return BoxDecoration(
+      border: Border.all(
+        width: 1,
+        color: ColorSchemer.buttonColor.withOpacity(0.3),
       ),
     );
   }
@@ -158,12 +186,24 @@ class _TagFiltersState extends State<TagFilters> {
   }
 
   Widget _buildApplyFiltersButton(List<Tag> activeFilters, BuildContext context) {
-    return TextButton(
+    return SizedBox(
+      width: 250,
+      height: 50,
+      child: ElevatedButton.icon(
+        label: Text(
+          "Apply filters",
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.ubuntu(
+            fontSize: 18,
+          ),
+        ),
+        icon: const Icon(Icons.filter_alt),
         onPressed: () {
           context.read<FiltersCubit>().setFilters(activeFilters);
           context.read<EventsCubit>().refreshEvents(activeFilters);
           Navigator.of(context).pop();
         },
-        child: const Text("Apply filters"));
+      ),
+    );
   }
 }
