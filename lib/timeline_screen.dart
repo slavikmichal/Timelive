@@ -25,11 +25,17 @@ class TimelineScreen extends StatelessWidget {
       persistentFooterButtons: [
         IconButton(
           icon: const Icon(Icons.add),
-          onPressed: () => context.read<ZoomCubit>().zoomIn(),
+          onPressed: () {
+            context.read<ZoomCubit>().zoomIn();
+            context.read<EventsCubit>().filterEvents(context.read<ZoomCubit>().state);
+          },
         ),
         IconButton(
           icon: const Icon(Icons.remove),
-          onPressed: () => context.read<ZoomCubit>().zoomOut(),
+          onPressed: () {
+            context.read<ZoomCubit>().zoomOut();
+            context.read<EventsCubit>().filterEvents(context.read<ZoomCubit>().state);
+          },
         )
       ],
       floatingActionButton: FloatingActionButton(
