@@ -15,7 +15,7 @@ class DataGenerator {
   static List<Tag> allTags = [];
   static Faker get faker => Faker();
 
-  static void generateSomeData() async {
+  static Future<int> generateSomeData() async {
     if (allTags.isEmpty) {
       allTags = await EventController.getAllTags();
     }
@@ -24,6 +24,8 @@ class DataGenerator {
       var generatedEvent = generateEvent();
       EventController.addEvent(generatedEvent);
     }
+
+    return elementsCountToGenerate;
   }
 
   static EventFormState generateEvent() {

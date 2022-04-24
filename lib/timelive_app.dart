@@ -19,6 +19,7 @@ class TimeliveApp extends StatelessWidget {
         return cubit;
       },
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Timelive',
         // themeMode: ThemeMode.system,
         themeMode: ThemeMode.light,
