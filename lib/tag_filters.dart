@@ -195,7 +195,6 @@ class _TagFiltersState extends State<TagFilters> {
           overflow: TextOverflow.ellipsis,
           style: GoogleFonts.ubuntu(
             fontSize: 18,
-            fontWeight: FontWeight.bold,
           ),
         ),
         icon: const Icon(Icons.filter_alt),

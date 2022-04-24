@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
@@ -10,7 +11,7 @@ import 'package:timelive/models/timeline_zoom.dart';
 import 'package:timelive/themes/color_schemer.dart';
 import 'package:timelive/tile.dart';
 
-import 'controllers/event_controller.dart';
+import 'bloc/events_cubit.dart';
 import 'icon_indicator.dart';
 import 'line_painter.dart';
 import 'models/event.dart';
@@ -23,15 +24,15 @@ class CreateEventScreen extends StatefulWidget {
 }
 
 class _CreateEventScreenState extends State<CreateEventScreen> {
-  final _formState = EventFormState();
+  EventFormState _formState = EventFormState();
   static const textShift = 0.19988425925925924769188314471879;
-  final _textController = TextEditingController(text: '');
+  final _tagTextController = TextEditingController(text: '');
 
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
-    _textController.dispose();
+    _tagTextController.dispose();
     super.dispose();
   }
 
@@ -98,10 +99,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     return ElevatedButton(
       child: const Text("Add Tag"),
       onPressed: () {
-        if (_textController.value.text != '') {
+        if (_tagTextController.value.text != '') {
           setState(() {
-            _formState.tags.add(_textController.value.text);
-            _textController.clear();
+            _formState.tags.add(_tagTextController.value.text);
+            _tagTextController.clear();
           });
         }
       },
@@ -112,7 +113,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     return ElevatedButton(
       child: Text("Create event".toUpperCase()),
       onPressed: () {
-        EventController.addEvent(_formState);
+        context.read<EventsCubit>().addEvent(_formState);
         //TODO confirmation
         Navigator.of(context).pop();
       },
@@ -137,7 +138,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   Widget _addTag() {
     return TextFormField(
-      controller: _textController,
+      controller: _tagTextController,
       decoration: _inputDecoration('#tag'),
     );
   }
@@ -183,7 +184,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   InputDecoration _inputDecoration(String label, {String helper = ''}) {
     return InputDecoration(
-      border: OutlineInputBorder(),
+      border: const OutlineInputBorder(),
       labelText: label,
       hintText: helper == '' ? null : helper,
     );
@@ -193,10 +194,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     return TextFormField(
       initialValue: _formatDateTime(_formState.date),
       decoration: _inputDecoration('Event date'),
-      onChanged: (value) {
-        _formState.date = DateTime.parse(value);
-      },
-      //onTap: _selectDate(context),
+      onChanged: (value) => _formState.date = DateTime.parse(value),
+      onTap: () => _selectDate(context),
     );
   }
 
@@ -208,9 +207,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       lastDate: DateTime(2025),
     );
     if (selected != null && selected != _formState.date) {
-      setState(() {
-        _formState.date = selected;
-      });
+      setState(() => _formState.date = selected);
     }
   }
 

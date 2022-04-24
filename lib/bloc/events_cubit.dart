@@ -4,15 +4,23 @@ import 'package:timelive/models/tag.dart';
 import 'package:timelive/models/timeline_zoom.dart';
 
 import '../models/event.dart';
+import '../models/event_form_state.dart';
 
 class EventsCubit extends Cubit<List<Event>> {
   late List<Event> events = [];
+  late List<Tag> cachedTags = [];
 
   EventsCubit() : super([]);
 
   void refreshEvents(List<Tag> activeTags) async {
     events = await EventController.getAllEvents(activeTags);
+    cachedTags = activeTags;
     emit(events);
+  }
+
+  void addEvent(EventFormState eventFormState) {
+    EventController.addEvent(eventFormState);
+    refreshEvents(cachedTags);
   }
 
   void filterEvents(List<Tag> activeTags, TimelineZoom zoom) {

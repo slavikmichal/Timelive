@@ -63,7 +63,7 @@ class TimelineScreen extends StatelessWidget {
             child: const Icon(Icons.qr_code),
             backgroundColor: ColorSchemer.buttonColor,
             foregroundColor: ColorSchemer.vismaBlack,
-            label: 'Scan QR Code'.toUpperCase(),
+            label: 'Scan QR'.toUpperCase(),
             onTap: () async {
               QrCodeData? qrCode = await QrScanner.scan();
               if (qrCode == null) {
