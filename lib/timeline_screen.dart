@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timelive/bloc/zoom_cubit.dart';
 import 'package:timelive/controllers/event_controller.dart';
+import 'package:timelive/create_event_screen.dart';
+import 'package:timelive/data/data_generator.dart';
 import 'package:timelive/event_screen.dart';
 import 'package:timelive/models/event.dart';
 import 'package:timelive/models/timeline_zoom.dart';
@@ -30,7 +32,13 @@ class TimelineScreen extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.remove),
           onPressed: () => context.read<ZoomCubit>().zoomOut(),
-        )
+        ),
+        IconButton(
+          icon: const Icon(Icons.add_a_photo),
+          onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => const CreateEventScreen(),
+          )),
+        ),
       ],
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.qr_code_scanner),

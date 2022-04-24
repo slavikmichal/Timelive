@@ -13,6 +13,7 @@ class Tile extends StatelessWidget {
   final TimelineZoom zoom;
   final bool isFirst;
   final bool isLast;
+  final bool showDate;
 
   const Tile({
     Key? key,
@@ -21,6 +22,7 @@ class Tile extends StatelessWidget {
     required this.zoom,
     this.isFirst = false,
     this.isLast = false,
+    this.showDate = true,
   }) : super(key: key);
 
   @override
@@ -102,7 +104,7 @@ class Tile extends StatelessWidget {
     var day = date.day.toString().padLeft(2, '0');
     var month = date.month.toString().padLeft(2, '0');
     var year = date.year.toString();
-    return "$day.$month.$year";
+    return showDate ? "$day.$month.$year" : '';
   }
 
   String _getTitleByZoom(Event event) {
