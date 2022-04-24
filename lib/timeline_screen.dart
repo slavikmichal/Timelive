@@ -49,14 +49,17 @@ class TimelineScreen extends StatelessWidget {
           }),
       // backgroundColor: Colors.black,
       body: BlocBuilder<EventsCubit, List<Event>>(builder: (context, events) {
-        return ScrollablePositionedList.builder(
-          itemCount: events.length,
-          itemBuilder: (context, index) => buildTile(
-            context,
-            events.elementAt(index),
-            index,
-            isFirst: index == 0,
-            isLast: index == events.length - 1,
+        return Padding(
+          padding: const EdgeInsets.only(top: 20.0),
+          child: ScrollablePositionedList.builder(
+            itemCount: events.length,
+            itemBuilder: (context, index) => buildTile(
+              context,
+              events.elementAt(index),
+              index,
+              isFirst: index == 0,
+              isLast: index == events.length - 1,
+            ),
           ),
         );
       }),
