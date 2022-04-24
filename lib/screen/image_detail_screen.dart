@@ -9,15 +9,16 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:image/image.dart' as Cool;
-import 'package:timelive/qr_code/generator/qr_generator.dart';
+import 'package:timelive/widget/CommonScaffold.dart';
 
 class ImagesDetailScreen extends StatefulWidget {
   final List<String> urls;
   final int startIndex;
   final String eventId;
 
-  const ImagesDetailScreen({Key? key, required this.urls, required this.startIndex, required this.eventId}) : super(key: key);
+  final GlobalKey<FormState> screenShotGlobalKey = GlobalKey();
+
+  ImagesDetailScreen({Key? key, required this.urls, required this.startIndex, required this.eventId}) : super(key: key);
 
   @override
   State<ImagesDetailScreen> createState() => _ImagesDetailScreenState();
@@ -35,8 +36,6 @@ class _ImagesDetailScreenState extends State<ImagesDetailScreen> {
 
   // Get screen width of viewport.
   double get screenWidth => MediaQuery.of(context).size.width;
-
-  final ScreenshotController screenshotController = ScreenshotController();
 
   @override
   void initState() {
@@ -87,6 +86,8 @@ class _ImagesDetailScreenState extends State<ImagesDetailScreen> {
                   }
                 },
                 itemBuilder: (context, itemIndex, realIndex) {
+                  ScreenshotController _screenshotController = ScreenshotController();
+
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5.0),
                     child: GestureDetector(
@@ -96,22 +97,21 @@ class _ImagesDetailScreenState extends State<ImagesDetailScreen> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                content: Column(
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () => savePhoto(),
-                                      child: const Text("Save image"),
-                                    ),
-                                    // ElevatedButton(
-                                    //   onPressed: () => savePhotoQr(),
-                                    //   child: const Text("Save with QR code"),
-                                    // ),
-                                  ],
+                                content: ElevatedButton(
+                                  onPressed: () {
+                                    savePhoto(_screenshotController);
+                                    ScaffoldMessengerManager.publish(
+                                      context,
+                                      const Text('Photo was saved to local storage. Check your file manager.'),
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Save image"),
                                 ),
                               );
                             }),
                         child: Screenshot(
-                          controller: screenshotController,
+                          controller: _screenshotController,
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
@@ -137,9 +137,9 @@ class _ImagesDetailScreenState extends State<ImagesDetailScreen> {
     );
   }
 
-  savePhoto() async {
+  savePhoto(ScreenshotController controller) async {
     final directory = (await getApplicationDocumentsDirectory()).path;
-    screenshotController.capture().then((Uint8List? image) async {
+    controller.capture().then((Uint8List? image) async {
       if (image != null) {
         try {
           final String fullPath = '$directory/${DateTime.now().millisecond}.png';
@@ -154,30 +154,30 @@ class _ImagesDetailScreenState extends State<ImagesDetailScreen> {
     });
   }
 
-  // savePhotoQr() async {
-  //   final directory = (await getApplicationDocumentsDirectory()).path;
-  //   screenshotController.capture().then((Uint8List? image) async {
-  //     if (image != null) {
-  //       try {
-  //         final qrCode = QrCodeFactory.generateSimple(eventId: widget.eventId, size: 280);
-  //         final mergedImage = Cool.Image(800, 500);
-  //         Cool.copyInto(mergedImage, Image.memory(image), blend = false);
-  //         Cool.copyInto(mergedImage, qrCode, dstx = image1.width, blend = false);
-  //
-  //
-  //         final documentDirectory = await getApplicationDocumentsDirectory();
-  //         final file = new File(join(documentDirectory.path, "merged_image.jpg"));
-  //         file.writeAsBytesSync(encodeJpg(mergedImage));
-  //
-  //         final String fullPath = '$directory/${DateTime.now().millisecond}.png';
-  //         File capturedFile = File(fullPath);
-  //         await capturedFile.writeAsBytes(image);
-  //         print(capturedFile.path);
-  //         await GallerySaver.saveImage(capturedFile.path).then((value) {
-  //           print('PRINTED');
-  //         });
-  //       } catch (error) {}
-  //     }
-  //   });
-  // }
+// savePhotoQr() async {
+//   final directory = (await getApplicationDocumentsDirectory()).path;
+//   screenshotController.capture().then((Uint8List? image) async {
+//     if (image != null) {
+//       try {
+//         final qrCode = QrCodeFactory.generateSimple(eventId: widget.eventId, size: 280);
+//         final mergedImage = Cool.Image(800, 500);
+//         Cool.copyInto(mergedImage, Image.memory(image), blend = false);
+//         Cool.copyInto(mergedImage, qrCode, dstx = image1.width, blend = false);
+//
+//
+//         final documentDirectory = await getApplicationDocumentsDirectory();
+//         final file = new File(join(documentDirectory.path, "merged_image.jpg"));
+//         file.writeAsBytesSync(encodeJpg(mergedImage));
+//
+//         final String fullPath = '$directory/${DateTime.now().millisecond}.png';
+//         File capturedFile = File(fullPath);
+//         await capturedFile.writeAsBytes(image);
+//         print(capturedFile.path);
+//         await GallerySaver.saveImage(capturedFile.path).then((value) {
+//           print('PRINTED');
+//         });
+//       } catch (error) {}
+//     }
+//   });
+// }
 }
