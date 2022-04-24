@@ -63,7 +63,7 @@ class Tile extends StatelessWidget {
                   ),
                   if (zoom == TimelineZoom.fullDescription || zoom == TimelineZoom.shortDescription)
                     Padding(
-                      padding: const EdgeInsets.only(right: 15),
+                      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.1),
                       child: Text(
                         _formatDateTime(event.date),
                         style: GoogleFonts.ubuntu(
