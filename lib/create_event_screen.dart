@@ -2,12 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:timelive/models/event_form_state.dart';
 import 'package:timelive/models/timeline_zoom.dart';
 import 'package:timelive/tile.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 import 'controllers/event_controller.dart';
 import 'icon_indicator.dart';
@@ -51,7 +50,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 60, right: 50),
+              padding: EdgeInsets.only(left: (0.15 * MediaQuery.of(context).size.width), right: 50),
               child: Column(
                 children: [
                   _addName(),
@@ -60,7 +59,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   const SizedBox(height: 20),
                   _addDate(context),
                   const SizedBox(height: 20),
-                  _addTags(),
+                  _addTags(context),
                   const SizedBox(height: 20),
                   _uploadImages(),
                   const SizedBox(height: 20),
@@ -74,7 +73,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     );
   }
 
-  Widget _addTags() {
+  Widget _addTags(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -82,7 +81,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _addTag(),
-            const SizedBox(width: 20),
+            SizedBox(height: (MediaQuery.of(context).size.height * 0.01)),
             _addTagButton(),
           ],
         ),
