@@ -18,7 +18,6 @@ import 'package:timelive/themes/color_schemer.dart';
 import 'package:timelive/tile.dart';
 import 'package:timelive/widget/CommonScaffold.dart';
 
-
 import 'bloc/events_cubit.dart';
 import 'create_event_screen.dart';
 import 'icon_indicator.dart';
