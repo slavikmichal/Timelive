@@ -58,6 +58,7 @@ class _ImagesDetailScreenState extends State<ImagesDetailScreen> {
             child: SizedBox(
               height: 400,
               child: InfiniteCarousel.builder(
+                velocityFactor: 0.5,
                 itemCount: widget.urls.length,
                 itemExtent: _itemExtent ?? 40,
                 scrollBehavior: kIsWeb
@@ -73,18 +74,14 @@ class _ImagesDetailScreenState extends State<ImagesDetailScreen> {
                 controller: _controller,
                 onIndexChanged: (index) {
                   if (_selectedIndex != index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
+                    setState(() => _selectedIndex = index);
                   }
                 },
                 itemBuilder: (context, itemIndex, realIndex) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5.0),
                     child: GestureDetector(
-                      onTap: () {
-                        _controller.animateToItem(realIndex);
-                      },
+                      onTap: () => _controller.animateToItem(realIndex),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
