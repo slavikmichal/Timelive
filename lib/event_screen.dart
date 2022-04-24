@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:timelive/line_painter.dart';
 import 'package:timelive/models/event.dart';
+import 'package:timelive/models/timeline_zoom.dart';
 import 'package:timelive/qr_code/screen/generated_qr_code.dart';
 import 'package:timelive/tile.dart';
 
@@ -85,6 +86,7 @@ class _EventScreenState extends State<EventScreen> {
                   iconData: Icons.circle,
                   size: 20,
                 ),
+                zoom: TimelineZoom.fullDescription,
                 event: widget.event,
                 isFirst: false,
                 isLast: false,

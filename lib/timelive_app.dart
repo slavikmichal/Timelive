@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:timelive/bloc/zoom_cubit.dart';
+import 'package:timelive/models/timeline_zoom.dart';
 import 'package:timelive/themes/color_schemer.dart';
 import 'package:timelive/timeline_screen.dart';
 
@@ -13,7 +15,7 @@ class TimeliveApp extends StatelessWidget {
     return BlocProvider(
       create: (_) {
         final cubit = EventsCubit();
-        cubit.initialize();
+        cubit.refreshEvents();
         return cubit;
       },
       child: MaterialApp(
@@ -22,7 +24,9 @@ class TimeliveApp extends StatelessWidget {
         themeMode: ThemeMode.light,
         theme: ColorSchemer.lightTheme(),
         darkTheme: ColorSchemer.darkTheme(),
-        home: const TimelineScreen(),
+        home: BlocProvider(
+          create: (_) => ZoomCubit(TimelineZoom.fullDescription),
+            child: TimelineScreen()),
       ),
     );
   }

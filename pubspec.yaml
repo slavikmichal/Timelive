@@ -24,6 +24,8 @@ dependencies:
 
   timeline_tile: ^2.0.0
 
+  faker: ^2.0.0
+
   qr_flutter: ^4.0.0 # QR generate
   barcode_scan2: ^4.2.0 # QR scanning
 
@@ -34,6 +36,9 @@ dependencies:
   infinite_carousel: ^1.0.2
   flutter_bloc: ^8.0.1
   flutter_typeahead: ^3.2.5
+  scrollable_positioned_list: ^0.2.3
+  image_picker: ^0.8.5
+  permission_handler: ^9.2.0
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:timelive/models/event.dart';
+import 'package:timelive/models/timeline_zoom.dart';
 import 'package:timelive/themes/color_schemer.dart';
 
 import 'icon_indicator.dart';
@@ -9,15 +10,19 @@ import 'icon_indicator.dart';
 class Tile extends StatelessWidget {
   final IconIndicator indicator;
   final Event event;
+  final TimelineZoom zoom;
   final bool isFirst;
   final bool isLast;
+  final bool showDate;
 
   const Tile({
     Key? key,
     required this.indicator,
     required this.event,
+    required this.zoom,
     this.isFirst = false,
     this.isLast = false,
+    this.showDate = true,
   }) : super(key: key);
 
   @override
@@ -39,50 +44,56 @@ class Tile extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16, right: 10, top: 10, bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  event.name,
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 18,
-                    color: ColorSchemer.textColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
+                Flexible(
                   child: Text(
-                    _formatDateTime(event.date),
+                    _getTitleByZoom(event),
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.ubuntu(
                       fontSize: 18,
                       color: ColorSchemer.textColor,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+                if (zoom == TimelineZoom.fullDescription || zoom == TimelineZoom.shortDescription)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Text(
+                      _formatDateTime(event.date),
+                      style: GoogleFonts.ubuntu(
+                        fontSize: 18,
+                        color: ColorSchemer.textColor,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
               ],
             ),
             const SizedBox(height: 4),
-            Text(
-              event.tags.fold('', (previousValue, element) => previousValue + ' #$element'),
-              style: GoogleFonts.ubuntu(
-                fontSize: 16,
-                color: ColorSchemer.textColor,
-                fontWeight: FontWeight.normal,
+            if (zoom == TimelineZoom.fullDescription || zoom == TimelineZoom.shortDescription)
+              Text(
+                event.tags.fold('', (previousValue, element) => previousValue + ' #$element'),
+                style: GoogleFonts.ubuntu(
+                  fontSize: 16,
+                  color: ColorSchemer.textColor,
+                  fontWeight: FontWeight.normal,
+                ),
               ),
-            ),
             const SizedBox(height: 4),
-            Text(
-              event.description,
-              style: GoogleFonts.ubuntu(
-                fontSize: 14,
-                color: ColorSchemer.textColor,
-                fontWeight: FontWeight.normal,
-              ),
-            )
+            if (zoom == TimelineZoom.fullDescription)
+              Text(
+                event.description,
+                style: GoogleFonts.ubuntu(
+                  fontSize: 14,
+                  color: ColorSchemer.textColor,
+                  fontWeight: FontWeight.normal,
+                ),
+              )
           ],
         ),
       ),
@@ -93,6 +104,20 @@ class Tile extends StatelessWidget {
     var day = date.day.toString().padLeft(2, '0');
     var month = date.month.toString().padLeft(2, '0');
     var year = date.year.toString();
-    return "$day.$month.$year";
+    return showDate ? "$day.$month.$year" : '';
+  }
+
+  String _getTitleByZoom(Event event) {
+    switch (zoom) {
+      case TimelineZoom.year:
+          return event.date.year.toString();
+      case TimelineZoom.month:
+          return _formatDateTime(event.date).substring(3);
+      case TimelineZoom.day:
+          return _formatDateTime(event.date);
+      case TimelineZoom.shortDescription:
+      case TimelineZoom.fullDescription:
+          return event.name;
+    }
   }
 }
