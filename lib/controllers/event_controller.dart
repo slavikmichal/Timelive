@@ -33,6 +33,12 @@ class EventController {
     return _tagsRef.snapshots();
   }
 
+  static Future<List<Tag>> getTags() async {
+    final tagsSnapshot = await _tagsRef.get();
+
+    return tagsSnapshot.docs.map((e) => e.data()).toList();
+  }
+
   static Future<DocumentSnapshot<Event>> getEventById(String eventId) {
     return _eventsRef.doc(eventId).get();
   }

@@ -5,10 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timelive/controllers/event_controller.dart';
 import 'package:timelive/event_screen.dart';
 import 'package:timelive/models/event.dart';
+import 'package:timelive/models/tag.dart';
 import 'package:timelive/qr_code/model/qr_code_data.dart';
 import 'package:timelive/qr_code/scanner/qr_scanner.dart';
+import 'package:timelive/tag_filters.dart';
 import 'package:timelive/tile.dart';
-
 import 'bloc/events_cubit.dart';
 import 'icon_indicator.dart';
 
@@ -33,21 +34,44 @@ class TimelineScreen extends StatelessWidget {
             Event? eventData = eventSnapshot.data();
             _navigateToEventScreen(context, eventData!, 0);
           }),
-      // backgroundColor: Colors.black,
-      body: BlocBuilder<EventsCubit, List<Event>>(
-          builder: (context, events) {
+      drawer: Drawer(
+        elevation: 10,
+        child: FutureBuilder(
+            future: EventController.getTags(),
+            builder: (context, AsyncSnapshot<List<Tag>> snapshot) {
+              if (snapshot.hasData) {
+                List<Tag> loadedTags = snapshot.data!.toList();
 
-            return ListView.builder(
-              itemCount: events.length,
-              itemBuilder: (context, index) => buildTile(
-                context,
-                events.elementAt(index),
-                index,
-                isFirst: index == 0,
-                isLast: index == events.length - 1,
-              ),
-            );
-          }),
+                return TagFilters(allTags: loadedTags);
+              } else {
+                return Column(
+                  children: const [
+                    SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: CircularProgressIndicator(),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text('Awaiting result...'),
+                    )
+                  ],
+                );
+              }
+            }),
+      ),
+      body: BlocBuilder<EventsCubit, List<Event>>(builder: (context, events) {
+        return ListView.builder(
+          itemCount: events.length,
+          itemBuilder: (context, index) => buildTile(
+            context,
+            events.elementAt(index),
+            index,
+            isFirst: index == 0,
+            isLast: index == events.length - 1,
+          ),
+        );
+      }),
     );
   }
 

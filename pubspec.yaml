@@ -33,6 +33,7 @@ dependencies:
   cupertino_icons: ^1.0.4
   infinite_carousel: ^1.0.2
   flutter_bloc: ^8.0.1
+  flutter_typeahead: ^3.2.5
 
 dev_dependencies:
   flutter_test:
