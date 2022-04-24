@@ -53,9 +53,9 @@ class TimelineScreen extends StatelessWidget {
             backgroundColor: ColorSchemer.buttonColor,
             foregroundColor: ColorSchemer.vismaBlack,
             label: 'New Event'.toUpperCase(),
-            onTap: () => () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const CreateEventScreen(),
-                )),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => const CreateEventScreen(),
+            )),
           ),
           SpeedDialChild(
             child: const Icon(Icons.qr_code),

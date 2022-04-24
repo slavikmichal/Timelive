@@ -69,7 +69,7 @@ class _ImagesDetailScreenState extends State<ImagesDetailScreen> {
                         },
                       )
                     : null,
-                loop: true,
+                loop: false,
                 controller: _controller,
                 onIndexChanged: (index) {
                   if (_selectedIndex != index) {

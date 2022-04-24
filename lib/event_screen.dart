@@ -74,7 +74,7 @@ class _EventScreenState extends State<EventScreen> {
         label: Text('Generate QR Code'),
         icon: const Icon(Icons.qr_code),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => GeneratedQrCodeScreen(eventId: widget.event.id!),
+          builder: (_) => GeneratedQrCodeScreen(event: widget.event),
         )),
       ),
       // backgroundColor: Colors.black,
@@ -137,7 +137,7 @@ class _EventScreenState extends State<EventScreen> {
               },
             )
           : null,
-      loop: true,
+      loop: false,
       controller: _controller,
       onIndexChanged: (index) {
         if (_selectedIndex != index) {
@@ -181,16 +181,16 @@ class _EventScreenState extends State<EventScreen> {
     String event_id = widget.event.id ?? '99999999999';
     var _storageRef = FirebaseStorage.instance.ref().child(event_id);
 
-      List<String> paths = [];
+    List<String> paths = [];
 
-      final ListResult result = await _storageRef.list();
-      final List<Reference> allFiles = result.items;
+    final ListResult result = await _storageRef.list();
+    final List<Reference> allFiles = result.items;
 
-      await Future.forEach<Reference>(allFiles, (file) async {
-        final String fileUrl = await file.getDownloadURL();
-        paths.add(fileUrl);
-      });
+    await Future.forEach<Reference>(allFiles, (file) async {
+      final String fileUrl = await file.getDownloadURL();
+      paths.add(fileUrl);
+    });
 
-      return paths;
+    return paths;
   }
 }

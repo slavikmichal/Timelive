@@ -1,18 +1,13 @@
-import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faker/faker.dart';
 import 'package:timelive/controllers/event_controller.dart';
-import 'package:timelive/models/event.dart';
 import 'package:timelive/models/event_form_state.dart';
 import 'package:timelive/models/tag.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart';
-import 'package:faker/faker.dart';
 
 class DataGenerator {
-
-  static const int elementsCountToGenerate = 5;
+  static const int elementsCountToGenerate = 50;
 
   static List<Tag> allTags = [];
+
   static Faker get faker => Faker();
 
   static Future<int> generateSomeData() async {
@@ -51,5 +46,4 @@ class DataGenerator {
   static clearGeneratedData() async {
     await EventController.deleteGeneratedEvents();
   }
-
 }
