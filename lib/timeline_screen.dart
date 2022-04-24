@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timelive/bloc/zoom_cubit.dart';
 import 'package:timelive/controllers/event_controller.dart';
-import 'package:timelive/create_event_screen.dart';
-import 'package:timelive/data/data_generator.dart';
 import 'package:timelive/event_screen.dart';
 import 'package:timelive/models/event.dart';
 import 'package:timelive/models/tag.dart';
@@ -14,6 +12,7 @@ import 'package:timelive/qr_code/model/qr_code_data.dart';
 import 'package:timelive/qr_code/scanner/qr_scanner.dart';
 import 'package:timelive/tag_filters.dart';
 import 'package:timelive/tile.dart';
+
 import 'bloc/events_cubit.dart';
 import 'icon_indicator.dart';
 
@@ -108,7 +107,7 @@ class TimelineScreen extends StatelessWidget {
 
   Widget buildTile(BuildContext context, Event event, int index, TimelineZoom zoom, {bool isFirst = false, bool isLast = false}) {
     return InkWell(
-      onTap: () => _navigateToEventScreen(context, event, index),
+      onTap: () => _handleTileClick(context, event, index, zoom),
       child: Hero(
         tag: 'event-tag$index',
         child: Tile(
@@ -123,6 +122,37 @@ class TimelineScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleTileClick(BuildContext context, Event event, int index, TimelineZoom zoom) {
+    final zoomCubit = context.read<ZoomCubit>();
+    switch (zoom) {
+      case TimelineZoom.year:
+        {
+          zoomCubit.zoomIn();
+          break;
+        }
+      case TimelineZoom.month:
+        {
+          zoomCubit.zoomIn();
+          break;
+        }
+      case TimelineZoom.day:
+        {
+          zoomCubit.zoomIn();
+          break;
+        }
+      case TimelineZoom.shortDescription:
+        {
+          _navigateToEventScreen(context, event, index);
+          break;
+        }
+      case TimelineZoom.fullDescription:
+        {
+          _navigateToEventScreen(context, event, index);
+          break;
+        }
+    }
   }
 
   Future<dynamic> _navigateToEventScreen(BuildContext context, Event event, int index) {

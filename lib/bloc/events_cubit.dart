@@ -6,12 +6,14 @@ import 'package:timelive/models/timeline_zoom.dart';
 import '../models/event.dart';
 
 class EventsCubit extends Cubit<List<Event>> {
-  late final List<Event> events;
+  final List<Event> events = [];
 
   EventsCubit() : super([]);
 
   void refreshEvents() async {
-    events = await EventController.getAllEvents();
+    final freshEvents = await EventController.getAllEvents();
+    events.clear();
+    events.addAll(freshEvents);
     emit(events);
   }
 
@@ -19,12 +21,14 @@ class EventsCubit extends Cubit<List<Event>> {
     switch (zoom) {
       case TimelineZoom.year:
         {
-          emit(events.map((e) => e.date.year).toSet().map((e) => Event('', '', '', DateTime(e), const [])).toList());
+          final eventsCopy = events;
+          emit(eventsCopy.map((e) => e.date.year).toSet().map((e) => Event('', '', '', DateTime(e), const [])).toList());
           break;
         }
       case TimelineZoom.month:
         {
-          emit(events
+          final eventsCopy = events;
+          emit(eventsCopy
               .map((e) => _formatDateTime(e.date).substring(3))
               .toSet()
               .map(
@@ -34,12 +38,12 @@ class EventsCubit extends Cubit<List<Event>> {
         }
       case TimelineZoom.day:
         {
-          emit(events.map((e) => e.date).toSet().map((e) => Event('', '', '', DateTime(e.year, e.month, e.day), const [])).toList());
+          refreshEvents();
           break;
         }
       case TimelineZoom.shortDescription:
         {
-          emit(events);
+          refreshEvents();
           break;
         }
       case TimelineZoom.fullDescription:
