@@ -8,7 +8,7 @@ import '../../themes/color_schemer.dart';
 import '../generator/qr_generator.dart';
 
 class GeneratedQrCodeScreen extends StatelessWidget {
-  static double qrCodeSize = 240.0;
+  static double qrCodeSize = 280.0;
 
   final Event event;
 
@@ -26,7 +26,6 @@ class GeneratedQrCodeScreen extends StatelessWidget {
         bottom: true,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.all(12.0),
@@ -34,6 +33,7 @@ class GeneratedQrCodeScreen extends StatelessWidget {
                 fit: BoxFit.fitWidth,
                 child: Text(
                   event.name,
+                  textAlign: TextAlign.center,
                   // overflow: TextOverflow,
                   style: GoogleFonts.ubuntu(
                     fontSize: 20,
