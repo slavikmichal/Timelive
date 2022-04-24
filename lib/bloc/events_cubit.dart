@@ -12,8 +12,6 @@ class EventsCubit extends Cubit<List<Event>> {
 
   void refreshEvents(List<Tag> activeTags) async {
     events = await EventController.getAllEvents(activeTags);
-    // events.clear();
-    // events.addAll(freshEvents);
     emit(events);
   }
 
